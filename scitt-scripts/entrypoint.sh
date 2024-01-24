@@ -1,9 +1,11 @@
 #!/bin/bash -l
 
-# echo "scitt-client_id:       " ${1}
-# echo "scitt-scitt-secret:    " ${2}
-# echo "signed-statement-file: " ${3}
-# echo "feed:                  " ${4}
+echo "scitt-client_id:       " ${1}
+echo "scitt-scitt-secret:    " ${2}
+echo "signed-statement-file: " ${3}
+echo "feed:                  " ${4}
+
+ls -a
 
 # echo "Create an access token"
 ./create-token.sh ${1} ${2}
