@@ -9,6 +9,6 @@ RUN apk add --no-cache jq # httpie
 RUN echo '{"foo": "bar"}' | jq
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
-COPY ./scitt-scripts/ .
+COPY ./scitt-scripts/ /
 
 ENTRYPOINT ["/entrypoint.sh"]
