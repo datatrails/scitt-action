@@ -1,19 +1,16 @@
 # Container image that runs your code
 FROM python:3.12-alpine
 
+# Upgrade bash, and curl
 RUN apk add --no-cache --upgrade bash
 RUN apk add curl
 
 # Install jq
 RUN apk add --no-cache jq # httpie
-RUN echo '{"foo": "bar"}' | jq
 
-# Copies your code file from your action repository to the filesystem path `/` of the container
 COPY ./scitt-scripts/ /scripts/
 WORKDIR /scripts
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
-
-# -r ./scripts/requirements.txt
 
 ENTRYPOINT ["/scripts/entrypoint.sh"]

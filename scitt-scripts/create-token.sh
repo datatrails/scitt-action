@@ -14,7 +14,7 @@ if [[ $RESPONSE == *"access_token"* ]]; then
   TOKEN=$(echo -n $RESPONSE | jq -r .access_token)
   
   echo Authorization: Bearer $TOKEN > ./bearer-token.txt
-  cat ./bearer-token.txt
+  # cat ./bearer-token.txt
 else
   echo $RESPONSE
   exit -1
