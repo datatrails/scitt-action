@@ -21,4 +21,4 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.scitt-client_id,  inputs.scitt-secret, inputs.signed-statement-file, inputs.feed }}
+    - ${{ inputs.scitt-client_id inputs.scitt-secret inputs.signed-statement-file inputs.feed }}
