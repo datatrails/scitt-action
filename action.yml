@@ -14,6 +14,16 @@ inputs:
   scitt-secret:
     description: 'The SECRET used to access the DataTrails SCITT APIs'
     required: true
+  signing-key-file:
+    description: 'The .pem file used to sign the statement'
+    required: true
+  issuer:
+    description: 'The name of the issuer, set to CTW_Claims:iss'
+    required: true
+  output-file:
+    description: 'The file to save the cbor receipt'
+    required: true
+    default: 'receipt.cbor'
 outputs:
   token: # id of output
     description: 'the token used to authenticate'
@@ -25,3 +35,6 @@ runs:
     - ${{ inputs.scitt-secret }}
     - ${{ inputs.signed-statement-file }}
     - ${{ inputs.feed }}
+    - ${{ inputs.signing-key-file }}
+    - ${{ inputs.issuer }}
+    - ${{ inputs.output-file }}

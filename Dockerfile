@@ -9,6 +9,11 @@ RUN apk add --no-cache jq # httpie
 RUN echo '{"foo": "bar"}' | jq
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
-COPY ./scitt-scripts/ /
+COPY ./scitt-scripts/ /scripts/
+WORKDIR /scripts
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-ENTRYPOINT ["/entrypoint.sh"]
+# -r ./scripts/requirements.txt
+
+ENTRYPOINT ["/scripts/entrypoint.sh"]

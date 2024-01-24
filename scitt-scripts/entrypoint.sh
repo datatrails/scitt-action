@@ -4,14 +4,21 @@ echo "scitt-client_id:       " ${1}
 echo "scitt-scitt-secret:    " ${2}
 echo "signed-statement-file: " ${3}
 echo "feed:                  " ${4}
+echo "signing-key-file:      " ${5}
+echo "issuer:                " ${6}
+echo "output-file:           " ${7}
 
-lsblk
 ls -la
 
 # echo "Create an access token"
-./create-token.sh ${1} ${2}
+/scripts/create-token.sh ${1} ${2}
 
 # echo "Test permissions with the assets API"
 # ./query-assets.sh
 
-./create_signed_statement.py
+python /scripts/create_signed_statement.py \
+  --payload ${3} \
+  --feed ${4} \
+  --signing-key-file ${5} \
+  --issuer ${6} \
+  --output-file ${7}
