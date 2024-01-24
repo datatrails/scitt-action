@@ -1,0 +1,24 @@
+name: 'DataTrails SCITT API'
+description: 'Register, Get Receipts and Query Feeds from the DataTrails SCITT API'
+inputs:
+  signed-statement-file:
+    description: 'Path to a signed SCITT Statement .cbor file'
+    required: true
+    default: 'signed-statement.cbor'
+  feed:
+    description: 'Unique ID for the collection of statements about an artifact'
+    required: true
+  scitt-client_id:
+    description: 'The CLIENT_ID used to access the DataTrails SCITT APIs'
+    required: true
+  scitt-secret:
+    description: 'The SECRET used to access the DataTrails SCITT APIs'
+    required: true
+outputs:
+  token: # id of output
+    description: 'the token used to authenticate'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.scitt-client_id,  inputs.scitt-secret, inputs.signed-statement-file, inputs.feed }}

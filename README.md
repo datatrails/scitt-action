@@ -19,11 +19,10 @@ The time we greeted you.
 
 ## Example usage
 
-uses: actions/hello-world-docker-action@v2
-with:
-  who-to-greet: 'Mona the Octocat'
+## Build Locally
 
-git add action.yml entrypoint.sh Dockerfile README.md
-git commit -m "GitHub Action sample"
-git tag -a -m "First action release-test" v0.1
-git push --follow-tags
+docker build -t datatrails/scitt-action:v0.3.1 .
+
+## Run Locally
+
+docker run datatrails/scitt-action:v0.3.1 a b c d
