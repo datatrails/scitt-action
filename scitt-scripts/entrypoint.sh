@@ -9,7 +9,8 @@ echo "receipt-file:          " ${6}
 echo "signing-key-file:      " ${7}
 echo "issuer:                " ${8}
 
-SIGNED_STATEMENT_FILE= ./${5}
+SIGNED_STATEMENT_FILE=./${5}
+
 echo "SIGNED_STATEMENT_FILE: $SIGNED_STATEMENT_FILE"
 
 # echo "Create an access token"
