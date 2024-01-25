@@ -21,8 +21,10 @@ python /scripts/create_signed_statement.py \
   --issuer ${6} \
   --output-file ${7}
 
-OPERATION_ID=$(curl -X POST -H ./bearer-token.txt \
-                --data-binary ${3} \
+cat ./bearer-token.txt
+
+OPERATION_ID=$(curl -vv -X POST -H ./bearer-token.txt \
+                --data-binary @${3} \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries \
                 | jq -r .operationID)
 
