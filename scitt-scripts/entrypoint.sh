@@ -11,10 +11,16 @@ echo "issuer:                " ${8}
 
 SIGNED_STATEMENT_FILE=./${5}
 
+echo "list files"
+ls -a
+
 echo "SIGNED_STATEMENT_FILE: $SIGNED_STATEMENT_FILE"
 
 # echo "Create an access token"
 /scripts/create-token.sh ${1} ${2}
+
+echo "list files"
+ls -a
 
 # echo "Test permissions with the assets API"
 # ./query-assets.sh
@@ -30,6 +36,9 @@ python /scripts/create_signed_statement.py \
   --output-file $SIGNED_STATEMENT_FILE \
   --signing-key-file ${7} \
   --issuer ${8}
+
+echo "after signed statement"
+ls -a
 
 echo "output-file/signed-statement: " $SIGNED_STATEMENT_FILE
 #echo ${{ vars.SIGNED_STATEMENT }} >> $SIGNED_STATEMENT_FILE
