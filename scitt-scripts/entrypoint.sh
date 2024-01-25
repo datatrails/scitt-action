@@ -36,6 +36,10 @@ OPERATION_ID=$(curl -vv -X POST -H ./bearer-token.txt \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries \
                 | jq -r .operationID)
 
-echo $OPERATION_ID
+echo "OPERATION_ID :" $OPERATION_ID
 
-# ENTRY_ID=$(python scitt/check_operation_status.py --operation-id $OPERATION_ID)
+ENTRY_ID=$(python scitt/check_operation_status.py --operation-id $OPERATION_ID)
+echo "ENTRY_ID :" $ENTRY_ID
+
+curl -H @$HOME/.datatrails/bearer-token.txt \
+  https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.feed_id=$FEED | jq
