@@ -10,6 +10,9 @@ echo "signing-key-file:      " ${7}
 echo "issuer:                " ${8}
 
 SIGNED_STATEMENT_FILE=./${5}
+TOKEN_FILE=$HOME/.datatrails/bearer-token.txt
+mkdir -p $HOME/.datatrails
+chmod 0700 $HOME/.datatrails
 
 echo "list files"
 ls -a
@@ -17,7 +20,7 @@ ls -a
 echo "SIGNED_STATEMENT_FILE: $SIGNED_STATEMENT_FILE"
 
 # echo "Create an access token"
-/scripts/create-token.sh ${1} ${2}
+/scripts/create-token.sh ${1} ${2} $TOKEN_FILE
 
 echo "list files"
 ls -a
@@ -41,27 +44,24 @@ echo "after signed statement"
 ls -a
 
 echo "output-file/signed-statement: " $SIGNED_STATEMENT_FILE
-#echo ${{ vars.SIGNED_STATEMENT }} >> $SIGNED_STATEMENT_FILE
 ls -la $SIGNED_STATEMENT_FILE
 
 cat $SIGNED_STATEMENT_FILE
-
-echo "***foo***"
 
 echo "bearer-token.txt"
 cat ./bearer-token.txt
 
 echo "POST to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
-OPERATION_ID=$(curl -X POST -H @./bearer-token.txt \
+OPERATION_ID=$(curl -X POST -H @$TOKEN_FILE \
                 --data-binary @$SIGNED_STATEMENT_FILE \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries \
                 | jq -r .operationID)
 
 echo "OPERATION_ID :" $OPERATION_ID
 
-ENTRY_ID=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name "./bearer-token.txt")
+ENTRY_ID=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE)
 echo "ENTRY_ID :" $ENTRY_ID
 
-curl -H @./bearer-token.txt \
+curl -H @$TOKEN_FILE \
   https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.feed_id=$FEED | jq

@@ -2,6 +2,16 @@
 
 # echo "scitt-client_id:       " ${1}
 # echo "scitt-scitt-secret:    " ${2}
+# echo "token-file:            " ${3}
+if [ -z "$3" ]; then
+  TOKEN_FILE=$HOME/.datatrails/bearer-token.txt
+  mkdir -p $HOME/.datatrails
+  chmod 0700 $HOME/.datatrails
+else
+  echo ${3}
+fi
+
+echo $TOKEN_FILE
 
 RESPONSE=$(curl -s -S https://app.datatrails.ai/archivist/iam/v1/appidp/token \
             --data-urlencode "grant_type=client_credentials" \
@@ -9,12 +19,12 @@ RESPONSE=$(curl -s -S https://app.datatrails.ai/archivist/iam/v1/appidp/token \
             --data-urlencode "client_secret=${2}")
 
 if [[ $RESPONSE == *"access_token"* ]]; then
-  #rm ./bearer-token.txt
+  #rm $TOKEN_FILE
 
   TOKEN=$(echo -n $RESPONSE | jq -r .access_token)
   
-  echo Authorization: Bearer $TOKEN > ./bearer-token.txt
-  # cat ./bearer-token.txt
+  echo Authorization: Bearer $TOKEN > $TOKEN_FILE
+  # cat $TOKEN_FILE
 else
   echo $RESPONSE
   exit -1
