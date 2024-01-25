@@ -5,11 +5,12 @@
 # echo "token-file:            " ${3}
 if [ -z "$3" ]; then
   TOKEN_FILE=$HOME/.datatrails/bearer-token.txt
-  mkdir -p $HOME/.datatrails
-  chmod 0700 $HOME/.datatrails
 else
   echo ${3}
 fi
+
+mkdir -p $HOME/.datatrails
+chmod 0700 $HOME/.datatrails
 
 echo $TOKEN_FILE
 
