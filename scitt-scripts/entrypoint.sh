@@ -10,9 +10,7 @@ echo "signing-key-file:      " ${7}
 echo "issuer:                " ${8}
 
 SIGNED_STATEMENT_FILE=./${5}
-TOKEN_FILE=./bearer-token.txt
-mkdir -p $HOME/.datatrails
-chmod 0700 $HOME/.datatrails
+TOKEN_FILE="./bearer-token.txt"
 
 echo "list files"
 ls -a
@@ -26,7 +24,7 @@ echo "list files"
 ls -a
 
 # echo "Test permissions with the assets API"
-# ./query-assets.sh
+./query-assets.sh $TOKEN_FILE
 
 echo "payload:"
 cat ${4}
