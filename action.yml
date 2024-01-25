@@ -1,29 +1,32 @@
 name: 'DataTrails SCITT API'
 description: 'Register, Get Receipts and Query Feeds from the DataTrails SCITT API'
 inputs:
-  signed-statement-file:
-    description: 'Path to a signed SCITT Statement .cbor file'
-    required: true
-    default: 'signed-statement.cbor'
-  feed:
-    description: 'Unique ID for the collection of statements about an artifact'
-    required: true
   scitt-client_id:
     description: 'The CLIENT_ID used to access the DataTrails SCITT APIs'
     required: true
   scitt-secret:
     description: 'The SECRET used to access the DataTrails SCITT APIs'
     required: true
+  feed:
+    description: 'Unique ID for the collection of statements about an artifact'
+    required: true
+  payload:
+    description: 'The payload file to be registered on the SCITT Service (eg: SBOM, Scan Result, Attestation)'
+    required: true
+  signed-statement-file:
+    description: 'File representing the signed SCITT Statement that will be registered on SCITT.'
+    required: false
+    default: 'signed-statement.cbor'
+  receipt-file:
+    description: 'The file to save the cbor receipt'
+    required: false
+    default: 'receipt.cbor'
   signing-key-file:
     description: 'The .pem file used to sign the statement'
     required: true
   issuer:
     description: 'The name of the issuer, set to CTW_Claims:iss'
     required: true
-  output-file:
-    description: 'The file to save the cbor receipt'
-    required: true
-    default: 'receipt.cbor'
 outputs:
   token: # id of output
     description: 'the token used to authenticate'
@@ -33,8 +36,9 @@ runs:
   args:
     - ${{ inputs.scitt-client_id }}
     - ${{ inputs.scitt-secret }}
-    - ${{ inputs.signed-statement-file }}
     - ${{ inputs.feed }}
+    - ${{ inputs.payload }}
+    - ${{ inputs.signed-statement-file }}
+    - ${{ inputs.receipt-file }}
     - ${{ inputs.signing-key-file }}
     - ${{ inputs.issuer }}
-    - ${{ inputs.output-file }}

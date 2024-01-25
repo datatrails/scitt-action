@@ -2,11 +2,12 @@
 
 echo "scitt-client_id:       " ${1}
 echo "scitt-scitt-secret:    " ${2}
-echo "signed-statement-file: " ${3}
-echo "feed:                  " ${4}
-echo "signing-key-file:      " ${5}
-echo "issuer:                " ${6}
-echo "output-file:           " ${7}
+echo "feed:                  " ${3}
+echo "payload:               " ${4}
+echo "signed-statement-file: " ${5}
+echo "receipt-file:          " ${6}
+echo "signing-key-file:      " ${7}
+echo "issuer:                " ${8}
 
 # echo "Create an access token"
 /scripts/create-token.sh ${1} ${2}
@@ -15,16 +16,18 @@ echo "output-file:           " ${7}
 # ./query-assets.sh
 
 python /scripts/create_signed_statement.py \
-  --payload ${3} \
-  --feed ${4} \
-  --signing-key-file ${5} \
-  --issuer ${6} \
-  --output-file ${7}
+  --feed ${3} \
+  --payload ${4} \
+  --output-file ${5} \
+  --signing-key-file ${7} \
+  --issuer ${8}
+
+echo "output-file: " ${7}
 
 cat ./bearer-token.txt
 
 OPERATION_ID=$(curl -vv -X POST -H ./bearer-token.txt \
-                --data-binary @${3} \
+                --data-binary @${5} \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries \
                 | jq -r .operationID)
 
