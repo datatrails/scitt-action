@@ -18,6 +18,7 @@ echo "SIGNED_STATEMENT_FILE: $SIGNED_STATEMENT_FILE"
 
 # echo "Test permissions with the assets API"
 # ./query-assets.sh
+
 echo "payload:"
 cat ${4}
 
@@ -31,6 +32,8 @@ python /scripts/create_signed_statement.py \
   --issuer ${8}
 
 echo "output-file/signed-statement: " $SIGNED_STATEMENT_FILE
+echo ${{ vars.SIGNED_STATEMENT }} >> $SIGNED_STATEMENT_FILE
+
 cat $SIGNED_STATEMENT_FILE
 
 echo "***foo***"
