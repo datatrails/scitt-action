@@ -9,7 +9,7 @@ echo "receipt-file:          " ${6}
 echo "signing-key-file:      " ${7}
 echo "issuer:                " ${8}
 
-SIGNED_STATEMENT_FILE=./${5}
+SIGNED_STATEMENT_FILE=/${5}
 
 echo "SIGNED_STATEMENT_FILE: $SIGNED_STATEMENT_FILE"
 
@@ -32,6 +32,8 @@ python /scripts/create_signed_statement.py \
 
 echo "output-file/signed-statement: " $SIGNED_STATEMENT_FILE
 cat $SIGNED_STATEMENT_FILE
+
+echo "***foo***"
 
 echo "bearer-token.txt"
 cat ./bearer-token.txt
