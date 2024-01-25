@@ -60,7 +60,7 @@ OPERATION_ID=$(curl -X POST -H @./bearer-token.txt \
 
 echo "OPERATION_ID :" $OPERATION_ID
 
-ENTRY_ID=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID)
+ENTRY_ID=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name "./bearer-token.txt")
 echo "ENTRY_ID :" $ENTRY_ID
 
 curl -H @./bearer-token.txt \
