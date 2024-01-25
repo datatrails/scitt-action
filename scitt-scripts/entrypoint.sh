@@ -34,14 +34,18 @@ cat ./bearer-token.txt
 
 echo "POST to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
-OPERATION_ID=$(curl -vv -X POST -H @./bearer-token.txt \
+curl -v -X POST -H @./bearer-token.txt \
+                --data-binary @${5} \
+                https://app.datatrails.ai/archivist/v1/publicscitt/entries
+
+OPERATION_ID=$(curl -v -X POST -H @./bearer-token.txt \
                 --data-binary @${5} \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries \
                 | jq -r .operationID)
 
 echo "OPERATION_ID :" $OPERATION_ID
 
-ENTRY_ID=$(python scitt/check_operation_status.py --operation-id $OPERATION_ID)
+ENTRY_ID=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID)
 echo "ENTRY_ID :" $ENTRY_ID
 
 curl -H @./bearer-token.txt \
