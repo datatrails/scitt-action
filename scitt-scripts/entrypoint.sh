@@ -53,10 +53,6 @@ cat ./bearer-token.txt
 
 echo "POST to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
-curl -X POST -H @./bearer-token.txt \
-                --data-binary @$SIGNED_STATEMENT_FILE \
-                https://app.datatrails.ai/archivist/v1/publicscitt/entries
-
 OPERATION_ID=$(curl -X POST -H @./bearer-token.txt \
                 --data-binary @$SIGNED_STATEMENT_FILE \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries \
