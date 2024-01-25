@@ -9,6 +9,9 @@ echo "receipt-file:          " ${6}
 echo "signing-key-file:      " ${7}
 echo "issuer:                " ${8}
 
+SIGNED_STATEMENT_FILE= ./${5}
+echo "SIGNED_STATEMENT_FILE: $SIGNED_STATEMENT_FILE"
+
 # echo "Create an access token"
 /scripts/create-token.sh ${1} ${2}
 
@@ -22,24 +25,24 @@ echo "create_signed_statement.py"
 python /scripts/create_signed_statement.py \
   --feed ${3} \
   --payload ${4} \
-  --output-file ${5} \
+  --output-file $SIGNED_STATEMENT_FILE \
   --signing-key-file ${7} \
   --issuer ${8}
 
-echo "output-file/signed-statement: " ${5}
-cat ${5}
+echo "output-file/signed-statement: " $SIGNED_STATEMENT_FILE
+cat $SIGNED_STATEMENT_FILE
 
 echo "bearer-token.txt"
 cat ./bearer-token.txt
 
 echo "POST to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
-curl -v -X POST -H @./bearer-token.txt \
-                --data-binary @${5} \
+curl -X POST -H @./bearer-token.txt \
+                --data-binary @$SIGNED_STATEMENT_FILE \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries
 
-OPERATION_ID=$(curl -v -X POST -H @./bearer-token.txt \
-                --data-binary @${5} \
+OPERATION_ID=$(curl -X POST -H @./bearer-token.txt \
+                --data-binary @$SIGNED_STATEMENT_FILE \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries \
                 | jq -r .operationID)
 
