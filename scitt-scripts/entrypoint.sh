@@ -23,7 +23,12 @@ python /scripts/create_signed_statement.py \
   --issuer ${8}
 
 echo "output-file: " ${7}
+cat ${7}
 
+echo "signed-statement"
+cat ${5}
+
+echo "bearer-token.txt"
 cat ./bearer-token.txt
 
 OPERATION_ID=$(curl -vv -X POST -H ./bearer-token.txt \
