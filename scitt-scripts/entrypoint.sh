@@ -14,6 +14,10 @@ echo "issuer:                " ${8}
 
 # echo "Test permissions with the assets API"
 # ./query-assets.sh
+echo "payload:"
+cat ${4}
+
+echo "create_signed_statement.py"
 
 python /scripts/create_signed_statement.py \
   --feed ${3} \
@@ -22,16 +26,15 @@ python /scripts/create_signed_statement.py \
   --signing-key-file ${7} \
   --issuer ${8}
 
-echo "output-file: " ${7}
-cat ${7}
-
-echo "signed-statement"
+echo "output-file/signed-statement: " ${5}
 cat ${5}
 
 echo "bearer-token.txt"
 cat ./bearer-token.txt
 
-OPERATION_ID=$(curl -vv -X POST -H ./bearer-token.txt \
+echo "POST to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
+
+OPERATION_ID=$(curl -vv -X POST -H @./bearer-token.txt \
                 --data-binary @${5} \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries \
                 | jq -r .operationID)
@@ -41,5 +44,5 @@ echo "OPERATION_ID :" $OPERATION_ID
 ENTRY_ID=$(python scitt/check_operation_status.py --operation-id $OPERATION_ID)
 echo "ENTRY_ID :" $ENTRY_ID
 
-curl -H @$HOME/.datatrails/bearer-token.txt \
+curl -H @./bearer-token.txt \
   https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.feed_id=$FEED | jq
