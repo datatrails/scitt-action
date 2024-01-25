@@ -32,7 +32,7 @@ python /scripts/create_signed_statement.py \
   --issuer ${8}
 
 echo "output-file/signed-statement: " $SIGNED_STATEMENT_FILE
-echo ${{ vars.SIGNED_STATEMENT }} >> $SIGNED_STATEMENT_FILE
+#echo ${{ vars.SIGNED_STATEMENT }} >> $SIGNED_STATEMENT_FILE
 
 cat $SIGNED_STATEMENT_FILE
 
