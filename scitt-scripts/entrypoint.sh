@@ -10,7 +10,7 @@ echo "signing-key-file:      " ${7}
 echo "issuer:                " ${8}
 
 SIGNED_STATEMENT_FILE=./${5}
-TOKEN_FILE=$HOME/.datatrails/bearer-token.txt
+TOKEN_FILE=./bearer-token.txt
 mkdir -p $HOME/.datatrails
 chmod 0700 $HOME/.datatrails
 
@@ -48,8 +48,8 @@ ls -la $SIGNED_STATEMENT_FILE
 
 cat $SIGNED_STATEMENT_FILE
 
-echo "bearer-token.txt"
-cat ./bearer-token.txt
+echo "TOKEN_FILE: $TOKEN_FILE"
+cat $TOKEN_FILE
 
 echo "POST to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
