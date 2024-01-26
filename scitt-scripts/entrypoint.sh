@@ -4,12 +4,13 @@
 # echo "scitt-scitt-secret:    " ${2}
 # echo "feed:                  " ${3}
 # echo "payload:               " ${4}
-# echo "signed-statement-file: " ${5}
-# echo "receipt-file:          " ${6}
-# echo "signing-key-file:      " ${7}
-# echo "issuer:                " ${8}
+# echo "content-type:          " ${5}
+# echo "signed-statement-file: " ${6}
+# echo "receipt-file:          " ${7}
+# echo "signing-key-file:      " ${8}
+# echo "issuer:                " ${9}
 
-SIGNED_STATEMENT_FILE=./${5}
+SIGNED_STATEMENT_FILE=./${6}
 TOKEN_FILE="./bearer-token.txt"
 
 # echo "Create an access token"
@@ -21,9 +22,10 @@ TOKEN_FILE="./bearer-token.txt"
 python /scripts/create_signed_statement.py \
   --feed ${3} \
   --payload ${4} \
+  --content-type ${5} \
   --output-file $SIGNED_STATEMENT_FILE \
-  --signing-key-file ${7} \
-  --issuer ${8}
+  --signing-key-file ${8} \
+  --issuer ${9}
 
 echo "POST to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
@@ -42,4 +44,3 @@ echo "OPERATION_ID :" $OPERATION_ID
 
 # curl -H @$TOKEN_FILE \
 #   https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.feed_id=$FEED | jq
-
