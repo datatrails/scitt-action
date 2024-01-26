@@ -34,14 +34,12 @@ OPERATION_ID=$(curl -X POST -H @$TOKEN_FILE \
 
 echo "OPERATION_ID :" $OPERATION_ID
 
-echo "call: /scripts/check_operation_status.py"
-python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE
+# echo "call: /scripts/check_operation_status.py"
+# python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE
 
-echo "called directly, now calling nested"
+# ENTRY_ID=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE)
+# echo "ENTRY_ID :" $ENTRY_ID
 
-ENTRY_ID=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE)
-echo "ENTRY_ID :" $ENTRY_ID
-
-curl -H @$TOKEN_FILE \
-  https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.feed_id=$FEED | jq
+# curl -H @$TOKEN_FILE \
+#   https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.feed_id=$FEED | jq
 
