@@ -36,9 +36,10 @@ def get_operation_status(operation_id: str, headers: dict) -> dict:
     )
 
     response = requests.get(url, timeout=30, headers=headers)
-    print("response:")
+    print("***response:")
     print(response)
     print(response.json)
+    print("***response:")
     response.raise_for_status()
 
     return response.json()
@@ -53,8 +54,9 @@ def poll_operation_status(operation_id: str, headers: dict) -> str:
 
     for _ in range(poll_attempts):
         operation_status = get_operation_status(operation_id, headers)
-        print("operation_status:")
+        print("***operation_status:")
         print(operation_status)
+        print("***operation_status:")
 
         # pylint: disable=fixme
         # TODO: ensure get_operation_status handles error cases from the rest request
