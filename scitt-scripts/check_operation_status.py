@@ -20,7 +20,7 @@ def get_token_from_file(token_file_name: str) -> dict:
     assume the contents of the file is the
     whole authorization header: `Authorization: Bearer {token}`
     """
-    print("Get token from file", flush=true)
+    print("Get token from file", flush=True)
 
     with open(token_file_name, mode="r", encoding="utf-8") as token_file:
         auth_header = token_file.read().strip()
@@ -38,10 +38,10 @@ def get_operation_status(operation_id: str, headers: dict) -> dict:
     )
 
     response = requests.get(url, timeout=30, headers=headers)
-    print("***response:", flush=true)
-    print(response, flush=true)
-    print(response.json, flush=true)
-    print("***response:", flush=true)
+    print("***response:", flush=True)
+    print(response, flush=True)
+    print(response.json, flush=True)
+    print("***response:", flush=True)
     response.raise_for_status()
 
     return response.json()
@@ -56,9 +56,9 @@ def poll_operation_status(operation_id: str, headers: dict) -> str:
 
     for _ in range(poll_attempts):
         operation_status = get_operation_status(operation_id, headers)
-        print("***operation_status:", flush=true)
-        print(operation_status, flush=true)
-        print("***operation_status:", flush=true)
+        print("***operation_status:", flush=True)
+        print(operation_status, flush=True)
+        print("***operation_status:", flush=True)
 
         # pylint: disable=fixme
         # TODO: ensure get_operation_status handles error cases from the rest request
@@ -73,7 +73,7 @@ def poll_operation_status(operation_id: str, headers: dict) -> str:
 def main():
     """Polls for the signed statement to be registered"""
 
-    print("*****in-main*****", flush=true)
+    print("*****in-main*****", flush=True)
 
     parser = argparse.ArgumentParser(
         description="Polls for the signed statement to be registered"
@@ -104,18 +104,18 @@ def main():
 
     args = parser.parse_args()
 
-    print("args.token_file_name:", flush=true)
-    print(args.token_file_name, flush=true)
+    print("args.token_file_name:", flush=True)
+    print(args.token_file_name, flush=True)
 
     headers = get_token_from_file(args.token_file_name)
-    print("headers:", flush=true)
-    print(headers, flush=true)
+    print("headers:", flush=True)
+    print(headers, flush=True)
 
-    print("operation_id:", flush=true)
-    print(args.operation_id, flush=true)
+    print("operation_id:", flush=True)
+    print(args.operation_id, flush=True)
 
     entry_id = poll_operation_status(args.operation_id, headers)
-    print(entry_id, flush=true)
+    print(entry_id, flush=True)
 
 
 if __name__ == "__main__":
