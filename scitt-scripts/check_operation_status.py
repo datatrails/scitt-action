@@ -49,8 +49,6 @@ def poll_operation_status(operation_id: str, headers: dict) -> str:
     poll_attempts: int = int(POLL_TIMEOUT / POLL_INTERVAL)
 
     for _ in range(poll_attempts):
-        print("headers:")
-        print(headers)
         operation_status = get_operation_status(operation_id, headers)
 
         # pylint: disable=fixme

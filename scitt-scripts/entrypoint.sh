@@ -59,7 +59,7 @@ OPERATION_ID=$(curl -X POST -H @$TOKEN_FILE \
 echo "OPERATION_ID :" $OPERATION_ID
 
 echo "call: /scripts/check_operation_status.py"
-python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE
+#python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE
 
 ENTRY_ID=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE)
 echo "ENTRY_ID :" $ENTRY_ID
