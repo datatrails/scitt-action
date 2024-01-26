@@ -10,6 +10,8 @@ RUN apk add --no-cache jq # httpie
 
 COPY ./scitt-scripts/ /scripts/
 WORKDIR /scripts
+RUN cd /scripts
+
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 

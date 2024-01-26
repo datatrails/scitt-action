@@ -20,6 +20,8 @@ def get_token_from_file(token_file_name: str) -> dict:
     assume the contents of the file is the
     whole authorization header: `Authorization: Bearer {token}`
     """
+    print("Get token from file")
+
     with open(token_file_name, mode="r", encoding="utf-8") as token_file:
         auth_header = token_file.read().strip()
         header, value = auth_header.split(": ")
@@ -70,7 +72,9 @@ def poll_operation_status(operation_id: str, headers: dict) -> str:
 
 def main():
     """Polls for the signed statement to be registered"""
+
     print("*****in-main*****")
+
     parser = argparse.ArgumentParser(
         description="Polls for the signed statement to be registered"
     )
@@ -100,15 +104,15 @@ def main():
 
     args = parser.parse_args()
 
-    # print("args.token_file_name:")
-    # print(args.token_file_name)
+    print("args.token_file_name:")
+    print(args.token_file_name)
 
     headers = get_token_from_file(args.token_file_name)
-    # print("headers:")
-    # print(headers)
+    print("headers:")
+    print(headers)
 
-    # print("operation_id:")
-    # print(args.operation_id)
+    print("operation_id:")
+    print(args.operation_id)
 
     entry_id = poll_operation_status(args.operation_id, headers)
     print(entry_id)
