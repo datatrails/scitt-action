@@ -70,7 +70,7 @@ def poll_operation_status(operation_id: str, headers: dict) -> str:
 
 def main():
     """Polls for the signed statement to be registered"""
-
+    print("*****in-main*****")
     parser = argparse.ArgumentParser(
         description="Polls for the signed statement to be registered"
     )
