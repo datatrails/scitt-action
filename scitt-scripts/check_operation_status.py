@@ -93,15 +93,15 @@ def main():
 
     args = parser.parse_args()
 
-    print("args.token_file_name:")
-    print(args.token_file_name)
+    # print("args.token_file_name:")
+    # print(args.token_file_name)
 
     headers = get_token_from_file(args.token_file_name)
-    print("headers:")
-    print(headers)
+    # print("headers:")
+    # print(headers)
 
-    print("operation_id:")
-    print(args.operation_id)
+    # print("operation_id:")
+    # print(args.operation_id)
 
     entry_id = poll_operation_status(args.operation_id, headers)
     print(entry_id)
