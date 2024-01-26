@@ -36,6 +36,9 @@ def get_operation_status(operation_id: str, headers: dict) -> dict:
     )
 
     response = requests.get(url, timeout=30, headers=headers)
+    print("response:")
+    print(response)
+    print(response.json)
     response.raise_for_status()
 
     return response.json()
