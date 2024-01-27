@@ -14,7 +14,7 @@ inputs:
     description: 'The payload file to be registered on the SCITT Service (eg: SBOM, Scan Result, Attestation)'
     required: true
   content-type:
-    description: 'The payload content type (iana mediaType) to be registered on the SCITT Service (eg: application/spdx+json, vnd.cyclonedx+json, Scan Result, Attestation)'
+    description: 'The payload content type (iana mediaType) to be registered on the SCITT Service (eg: application/spdx+json, application/vnd.cyclonedx+json, Scan Result, Attestation)'
     required: true
   signed-statement-file:
     description: 'File representing the signed SCITT Statement that will be registered on SCITT.'

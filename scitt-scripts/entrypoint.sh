@@ -27,7 +27,7 @@ python /scripts/create_signed_statement.py \
   --signing-key-file ${8} \
   --issuer ${9}
 
-echo "POST to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
+echo "SCITT Register to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
 OPERATION_ID=$(curl -X POST -H @$TOKEN_FILE \
                 --data-binary @$SIGNED_STATEMENT_FILE \
@@ -42,5 +42,4 @@ echo "OPERATION_ID :" $OPERATION_ID
 # ENTRY_ID=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE)
 # echo "ENTRY_ID :" $ENTRY_ID
 
-# curl -H @$TOKEN_FILE \
-#   https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.feed_id=$FEED | jq
+# curl https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.feed_id=$FEED | jq
