@@ -16,8 +16,13 @@ TOKEN_FILE="./bearer-token.txt"
 # echo "Create an access token"
 /scripts/create-token.sh ${1} ${2} $TOKEN_FILE
 
+ls -a
+echo "PWD: $PWD"
+
 # echo "Test permissions with the assets API"
 ./query-assets.sh $TOKEN_FILE
+
+ls -la $TOKEN_FILE
 
 python /scripts/create_signed_statement.py \
   --feed ${3} \
