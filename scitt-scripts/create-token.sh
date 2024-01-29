@@ -21,7 +21,7 @@ if [[ $RESPONSE == *"access_token"* ]]; then
   #rm $TOKEN_FILE
 
   TOKEN=$(echo -n $RESPONSE | jq -r .access_token)
-
+  echo "Created: $TOKEN_FILE"
   echo Authorization: Bearer $TOKEN > $TOKEN_FILE
 
 else
