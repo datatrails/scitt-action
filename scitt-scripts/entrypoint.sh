@@ -20,7 +20,7 @@ ls -a
 echo "PWD: $PWD"
 
 # echo "Test permissions with the assets API"
-./query-assets.sh $TOKEN_FILE
+./scripts/query-assets.sh $TOKEN_FILE
 
 ls -la $TOKEN_FILE
 
@@ -34,12 +34,12 @@ python /scripts/create_signed_statement.py \
 
 echo "SCITT Register to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
-OPERATION_ID=$(curl -X POST -H @$TOKEN_FILE \
+RESPONSE=$(curl -X POST -H @$TOKEN_FILE \
                 --data-binary @$SIGNED_STATEMENT_FILE \
-                https://app.datatrails.ai/archivist/v1/publicscitt/entries \
-                | jq -r .operationID)
+                https://app.datatrails.ai/archivist/v1/publicscitt/entries)
+echo $RESPONSE
 
-echo "OPERATION_ID :" $OPERATION_ID
+echo "OPERATION_ID :" $OPERATION_ID | jq -r .operationID
 
 # echo "call: /scripts/check_operation_status.py"
 # python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE
