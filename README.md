@@ -8,10 +8,6 @@ This action prints "Hello World" or "Hello" + the name of a person to greet to t
 
 ## Inputs
 
-## `who-to-greet`
-
- The name of the person to greet. Default `"World"`.
-
 ## `scitt-client_id`
 
     **Required** The CLIENT_ID used to access the DataTrails SCITT APIs
