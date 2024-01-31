@@ -20,7 +20,7 @@ ls -a
 echo "PWD: $PWD"
 
 # echo "Test permissions with the assets API"
-./scripts/query-assets.sh $TOKEN_FILE
+/scripts/query-assets.sh $TOKEN_FILE
 
 ls -la $TOKEN_FILE
 
