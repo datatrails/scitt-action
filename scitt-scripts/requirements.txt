@@ -3,3 +3,5 @@ pycose~=1.0.1
 ecdsa~=0.18.0
 jwcrypto~=1.5.0
 requests~=2.31.0
+requests-pkcs12~=1.24
+cryptography~=42.0.2
