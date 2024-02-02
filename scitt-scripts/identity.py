@@ -1,4 +1,5 @@
 import base64
+import re
 
 from cryptography import x509
 from cryptography.hazmat.primitives import hashes
@@ -33,9 +34,13 @@ class Identity:
         assert isinstance(self._identity_document.public_key(), ec.EllipticCurvePublicKey)
         assert isinstance(self._identity_document.public_key().curve, ec.SECP256R1)
 
+    @classmethod
+    def _escape_value(cls, value: str) -> str:
+        return re.sub(r'[^0-9A-Za-z\-._]', lambda m: f'%{hex(ord(m[0]))[2:]}', value)
+
     def _get_subject_attribute_type_value_pairs(self):
         return [
-            (self._KNOWN_OID_TO_NAME_MAPPINGS.get(na.oid, na.oid.dotted_string), na.value)
+            (self._KNOWN_OID_TO_NAME_MAPPINGS.get(na.oid, na.oid.dotted_string), self._escape_value(na.value))
             for na in self._identity_document.subject
         ]
 
