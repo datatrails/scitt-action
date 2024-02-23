@@ -10,11 +10,11 @@ from key import IssuerPrivateKey
 
 class DigiCertSoftwareTrustManagerClient:
     def __init__(self):
-        self._certificate_id = os.environ['DIGICERT_STM_CERTIFICATE_ID']
-        self._stm_api_key = os.environ['DIGICERT_STM_API_KEY']
-        self._stm_api_base_uri = os.environ['DIGICERT_STM_API_BASE_URI']
-        self._stm_api_clientauth_p12 = base64.b64decode(os.environ['DIGICERT_STM_API_CLIENTAUTH_P12_B64'])
-        self._stm_api_clientauth_p12_password = os.environ['DIGICERT_STM_API_CLIENTAUTH_P12_PASSWORD']
+        self._certificate_id = os.environ['INPUT_DIGICERT_STM_CERTIFICATE_ID']
+        self._stm_api_key = os.environ['INPUT_DIGICERT_STM_API_KEY']
+        self._stm_api_base_uri = os.environ['INPUT_DIGICERT_STM_API_BASE_URI']
+        self._stm_api_clientauth_p12 = base64.b64decode(os.environ['INPUT_DIGICERT_STM_API_CLIENTAUTH_P12_B64'])
+        self._stm_api_clientauth_p12_password = os.environ['INPUT_DIGICERT_STM_API_CLIENTAUTH_P12_PASSWORD']
 
     def _execute_request(self, method, uri, body_json=None):
         uri = f'{self._stm_api_base_uri.rstrip("/")}/{uri.lstrip("/")}'

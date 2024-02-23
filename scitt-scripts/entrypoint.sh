@@ -7,8 +7,6 @@
 # echo "content-type:          " ${5}
 # echo "signed-statement-file: " ${6}
 # echo "receipt-file:          " ${7}
-# echo "signing-key-file:      " ${8}
-# echo "issuer:                " ${9}
 
 SIGNED_STATEMENT_FILE=./${6}
 TOKEN_FILE="./bearer-token.txt"
@@ -23,11 +21,9 @@ ls -la $TOKEN_FILE
 
 python /scripts/create_signed_statement.py \
   --feed ${3} \
-  --payload ${4} \
+  --payload-file ${4} \
   --content-type ${5} \
-  --output-file $SIGNED_STATEMENT_FILE \
-  --signing-key-file ${8} \
-  --issuer ${9}
+  --output-file $SIGNED_STATEMENT_FILE
 
 echo "SCITT Register to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 

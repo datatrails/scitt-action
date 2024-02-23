@@ -24,11 +24,21 @@ inputs:
     description: 'The file to save the cbor receipt'
     required: false
     default: 'receipt.cbor'
-  signing-key-file:
-    description: 'The .pem file used to sign the statement'
+  digicert-stm-certificate-id:
+    description: 'The certificate ID corresponding to the certificate (and signing key) to sign the statement'
     required: true
-  issuer:
-    description: 'The name of the issuer, set to CTW_Claims:iss'
+  digicert-stm-api-key:
+    description: 'The API key for DigiCert Software Trust Manager'
+    required: true
+  digicert-stm-base-uri:
+    description: 'The base URI of the DigiCert Software Trust Manager API'
+    required: false
+    default: 'https://clientauth.demo.one.digicert.com/signingmanager'
+  digicert-stm-api-clientauth-p12-b64:
+    description: 'The Base64-encoded PKCS #12 file used for client authentication to the DigiCert Software Trust Manager API'
+    required: true
+  digicert-stm-api-clientauth-password:
+    description: 'The password for the PKCS #12 file used for client authentication to the DigiCert Software Trust Manager API'
     required: true
 outputs:
   token: # id of output
@@ -44,5 +54,3 @@ runs:
     - ${{ inputs.content-type }}
     - ${{ inputs.signed-statement-file }}
     - ${{ inputs.receipt-file }}
-    - ${{ inputs.signing-key-file }}
-    - ${{ inputs.issuer }}
