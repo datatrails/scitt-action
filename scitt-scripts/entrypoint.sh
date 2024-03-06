@@ -36,6 +36,8 @@ RESPONSE=$(curl -X POST -H @$TOKEN_FILE \
                 --data-binary @$SIGNED_STATEMENT_FILE \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries)
 
+echo "RESPONSE: $RESPONSE"
+
 OPERATION_ID=$(echo $RESPONSE | jq  -r .operationID)
 echo "OPERATION_ID: $OPERATION_ID"
 
