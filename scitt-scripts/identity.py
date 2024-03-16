@@ -27,7 +27,7 @@ class Identity:
 
     @property
     def iss(self):
-        return self.x5t[1]
+        return self.identity_document_fingerprint.hex()
 
     @property
     def public_key(self):
