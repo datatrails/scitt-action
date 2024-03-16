@@ -6,7 +6,7 @@ import json
 
 from ecdsa import SigningKey
 from pycose.algorithms import Es256
-from pycose.headers import Algorithm, KID, ContentType
+from pycose.headers import Algorithm, KID, ContentType, X5t, X5chain
 from pycose.keys.curves import P256
 from pycose.keys.keyparam import KpKty, EC2KpX, EC2KpY, EC2KpCurve
 from pycose.keys.keytype import KtyEC2
@@ -83,6 +83,7 @@ def create_signed_statement(
         KID: issuer.kid.encode(),
         ContentType: content_type,
         HEADER_LABEL_FEED: feed,
+        X5t: issuer.x5t,
         HEADER_LABEL_CWT: {
             HEADER_LABEL_CWT_ISSUER: issuer.iss,
             HEADER_LABEL_CWT_SUBJECT: feed,
@@ -97,8 +98,17 @@ def create_signed_statement(
         },
     }
 
-    # create the statement as a sign1 message using the protected header and payload
-    statement = Sign1Message(phdr=protected_header, payload=payload.encode("utf-8"))
+    unprotected_header = {
+        X5chain: issuer.x5chain
+    }
+
+    # create the statement as a sign1 message using the protected header,
+    # unprotected header, and payload
+    statement = Sign1Message(
+        phdr=protected_header,
+        uhdr=unprotected_header,
+        payload=payload.encode("utf-8")
+    )
 
     # HACK: get TBS
     tbs = statement._sig_structure
