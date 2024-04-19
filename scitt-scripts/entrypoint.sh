@@ -15,7 +15,7 @@ TOKEN_FILE="./bearer-token.txt"
 SUBJECT=${3}
 
 # echo "Create an access token"
-/scitt-scripts/create-token.sh ${1} ${2} $TOKEN_FILE
+/scripts/create-token.sh ${1} ${2} $TOKEN_FILE
 
 ls -a
 echo "PWD: $PWD"

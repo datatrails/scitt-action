@@ -8,11 +8,11 @@ RUN apk add curl
 # Install jq
 RUN apk add --no-cache jq # httpie
 
-COPY ./scitt-scripts/ /scitt-scripts/
-WORKDIR /scitt-scripts
-RUN cd /scitt-scripts
+COPY ./scitt-scripts/ /scripts/
+WORKDIR /scripts
+RUN cd /scripts
 
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-ENTRYPOINT ["/scitt-scripts/entrypoint.sh"]
+ENTRYPOINT ["/scripts/entrypoint.sh"]
