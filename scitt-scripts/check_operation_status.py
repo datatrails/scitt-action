@@ -37,12 +37,18 @@ def get_operation_status(operation_id: str, headers: dict) -> dict:
         f"https://app.datatrails.ai/archivist/v1/publicscitt/operations/{operation_id}"
     )
 
-    response = requests.get(url, timeout=30, headers=headers)
-    # print("***response:", flush=True)
-    # print(response, flush=True)
-    # print(response.json, flush=True)
-    # print("***response:", flush=True)
-    response.raise_for_status()
+    while True:
+        response = requests.get(url, timeout=30, headers=headers)
+        # print("***response:", flush=True)
+        # print(response, flush=True)
+        # print(response.json, flush=True)
+        # print("***response:", flush=True)
+        if response.status_code == 200:
+            break
+        elif response.status_code == 400:
+            continue
+        else:
+            response.raise_for_status()
 
     return response.json()
 
