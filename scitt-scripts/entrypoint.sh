@@ -1,14 +1,14 @@
 #!/bin/bash -l
 
-# echo "scitt-client_id:       " ${1}
-# echo "scitt-scitt-secret:    " ${2}
-# echo "feed:                  " ${3}
-# echo "payload:               " ${4}
-# echo "content-type:          " ${5}
-# echo "signed-statement-file: " ${6}
-# echo "receipt-file:          " ${7}
-# echo "signing-key-file:      " ${8}
-# echo "issuer:                " ${9}
+# echo "datatrails-client_id:    " ${1}
+# echo "datatrails-scitt-secret: " ${2}
+# echo "feed:                    " ${3}
+# echo "payload:                 " ${4}
+# echo "content-type:            " ${5}
+# echo "signed-statement-file:   " ${6}
+# echo "receipt-file:            " ${7}
+# echo "signing-key-file:        " ${8}
+# echo "issuer:                  " ${9}
 
 SIGNED_STATEMENT_FILE=./${6}
 TOKEN_FILE="./bearer-token.txt"

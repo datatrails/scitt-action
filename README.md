@@ -9,17 +9,17 @@ To get started, [Sign Up here](https://app.datatrails.ai/signup), then see [Crea
 
 ## Inputs
 
-## `scitt-client_id`
+## `datatrails-client_id`
 
 **Required** The `CLIENT_ID` used to access the DataTrails SCITT APIs
 
-## `scitt-secret`
+## `datatrails-secret`
 
 **Required** The `SECRET` used to access the DataTrails SCITT APIs
 
-## `feed`
+## `subject`
 
-**Required** Unique ID for the collection of statements about an artifact. For more info, see `Feed` in the [IETF SCITT Terminology](https://datatracker.ietf.org/doc/html/draft-ietf-scitt-architecture#name-terminology).
+**Required** Unique ID for the collection of statements about an artifact. For more info, see `subject` in the [IETF SCITT Terminology](https://datatracker.ietf.org/doc/html/draft-ietf-scitt-architecture#name-terminology).
 
 ## `payload`
 
@@ -72,7 +72,7 @@ env:
   DATATRAILS_CLIENT_ID: ${{ secrets.DATATRAILS_CLIENT_ID }}
   DATATRAILS_SECRET: ${{ secrets.DATATRAILS_SECRET }}
   SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-  FEED: "synsation.io/myproduct-v1.0"
+  SUBJECT: "synsation.io/myproduct-v1.0"
   ISSUER: "synsation.io"
 jobs:
   build-image-register-DataTrails-SCITT:
@@ -100,9 +100,9 @@ jobs:
         id: register-compliance-scitt-signed-statement
         uses: datatrails/scitt-action@v0.4
         with:
-          scitt-client_id: ${{ env.DATATRAILS_CLIENT_ID }}
-          scitt-secret: ${{ env.DATATRAILS_SECRET }}
-          feed: ${{ env.FEED }}
+          datatrails-client_id: ${{ env.DATATRAILS_CLIENT_ID }}
+          datatrails-secret: ${{ env.DATATRAILS_SECRET }}
+          subject: ${{ env.SUBJECT }}
           payload: "./buildOutput/attestation.json"
           content-type: "application/vnd.unknown.attestation+json"
           signing-key-file: "./signingkey.pem"

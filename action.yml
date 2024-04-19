@@ -1,13 +1,13 @@
 name: 'DataTrails SCITT API'
 description: 'Register, Get Receipts and Query Feeds from the DataTrails SCITT API'
 inputs:
-  scitt-client_id:
+  datatrails-client_id:
     description: 'The CLIENT_ID used to access the DataTrails SCITT APIs'
     required: true
-  scitt-secret:
+  datatrails-scitt-secret:
     description: 'The SECRET used to access the DataTrails SCITT APIs'
     required: true
-  feed:
+  subject:
     description: 'Unique ID for the collection of statements about an artifact'
     required: true
   payload:
@@ -37,9 +37,9 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.scitt-client_id }}
-    - ${{ inputs.scitt-secret }}
-    - ${{ inputs.feed }}
+    - ${{ inputs.datatrails-client_id }}
+    - ${{ inputs.datatrails-scitt-secret }}
+    - ${{ inputs.subject }}
     - ${{ inputs.payload }}
     - ${{ inputs.content-type }}
     - ${{ inputs.signed-statement-file }}
