@@ -4,7 +4,7 @@ inputs:
   datatrails-client_id:
     description: 'The CLIENT_ID used to access the DataTrails SCITT APIs'
     required: true
-  datatrails-scitt-secret:
+  datatrails-secret:
     description: 'The SECRET used to access the DataTrails SCITT APIs'
     required: true
   subject:
@@ -38,7 +38,7 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.datatrails-client_id }}
-    - ${{ inputs.datatrails-scitt-secret }}
+    - ${{ inputs.datatrails-secret }}
     - ${{ inputs.subject }}
     - ${{ inputs.payload }}
     - ${{ inputs.content-type }}

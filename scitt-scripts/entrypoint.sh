@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 # echo "datatrails-client_id:    " ${1}
-# echo "datatrails-scitt-secret: " ${2}
+# echo "datatrails-secret:       " ${2}
 # echo "subject:                 " ${3}
 # echo "payload:                 " ${4}
 # echo "content-type:            " ${5}

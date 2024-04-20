@@ -1,8 +1,8 @@
 #!/bin/bash -l
 
-# echo "scitt-client_id:       " ${1}
-# echo "scitt-scitt-secret:    " ${2}
-# echo "token-file:            " ${3}
+# echo "datatrails-client_id: " ${1}
+# echo "datatrails-secret:    " ${2}
+# echo "token-file:           " ${3}
 
 if [ -z "$3" ]; then
   TOKEN_FILE=$HOME/.datatrails/bearer-token.txt
