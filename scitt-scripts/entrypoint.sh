@@ -7,8 +7,6 @@
 # echo "content-type:            " ${5}
 # echo "signed-statement-file:   " ${6}
 # echo "receipt-file:            " ${7}
-# echo "signing-key-file:        " ${8}
-# echo "issuer:                  " ${9}
 
 SIGNED_STATEMENT_FILE=./${6}
 TOKEN_FILE="./bearer-token.txt"
@@ -26,20 +24,17 @@ echo "Sign statement with key protected in Software Trust Manager"
 
 python /scripts/create_signed_statement.py \
   --subject ${3} \
-  --payload ${4} \
+  --payload-file ${4} \
   --content-type ${5} \
   --output-file $SIGNED_STATEMENT_FILE
 
 echo "SCITT Register to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
-RESPONSE=$(curl -X POST -H @$TOKEN_FILE \
+OPERATION_ID=$(curl -X POST -H @$TOKEN_FILE \
                 --data-binary @$SIGNED_STATEMENT_FILE \
-                https://app.datatrails.ai/archivist/v1/publicscitt/entries)
+                https://app.datatrails.ai/archivist/v1/publicscitt/entries | jq -r .operationID)
 
-echo "RESPONSE: $RESPONSE"
-
-OPERATION_ID=$(echo $RESPONSE | jq  -r .operationID)
-echo "OPERATION_ID: $OPERATION_ID"
+echo "OPERATION_ID :" $OPERATION_ID
 
 echo "call: /scripts/check_operation_status.py"
 python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE
