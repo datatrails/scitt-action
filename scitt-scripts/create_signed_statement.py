@@ -1,22 +1,20 @@
 """ Module for creating a SCITT signed statement """
 
+import argparse
 import hashlib
 import json
-import argparse
 
-from typing import Optional
-
-from pycose.messages import Sign1Message
-from pycose.headers import Algorithm, KID, ContentType
+from ecdsa import SigningKey
 from pycose.algorithms import Es256
+from pycose.headers import Algorithm, KID, ContentType, X5t, X5chain
 from pycose.keys.curves import P256
-from pycose.keys.keyparam import KpKty, EC2KpD, EC2KpX, EC2KpY, KpKeyOps, EC2KpCurve
+from pycose.keys.keyparam import KpKty, EC2KpX, EC2KpY, EC2KpCurve
 from pycose.keys.keytype import KtyEC2
-from pycose.keys.keyops import SignOp, VerifyOp
-from pycose.keys import CoseKey
+from pycose.messages import Sign1Message
 
-from ecdsa import SigningKey, VerifyingKey
-
+import digicert_stm_client
+import identity
+import key
 
 # subject header label comes from version 2 of the scitt architecture document
 # https://www.ietf.org/archive/id/draft-birkholz-scitt-architecture-02.html#name-envelope-and-claim-format
@@ -63,7 +61,7 @@ def open_payload(payload_file: str) -> str:
 
 
 def create_signed_statement(
-    signing_key: SigningKey,
+    issuer: identity.Identity,
     payload: str,
     subject: str,
     issuer: str,
@@ -73,21 +71,16 @@ def create_signed_statement(
     creates a signed statement, given the signing_key, payload, subject and issuer
     """
 
-    verifying_key: Optional[VerifyingKey] = signing_key.verifying_key
-    assert verifying_key is not None
+    ec_public_numbers = issuer.public_key.public_numbers()
 
-    # pub key is the x and y parts concatenated
-    xy_parts = verifying_key.to_string()
-
-    # ecdsa P256 is 64 bytes
-    x_part = xy_parts[0:32]
-    y_part = xy_parts[32:64]
+    x_part = ec_public_numbers.x.to_bytes(32, byteorder='big')
+    y_part = ec_public_numbers.y.to_bytes(32, byteorder='big')
 
     # create a protected header where
     #  the verification key is attached to the cwt claims
     protected_header = {
         Algorithm: Es256,
-        KID: b"testkey",
+        KID: issuer.kid.encode(),
         ContentType: content_type,
         HEADER_LABEL_FEED: subject,
         HEADER_LABEL_CWT: {
@@ -104,41 +97,34 @@ def create_signed_statement(
         },
     }
 
-    # create the statement as a sign1 message using the protected header and payload
-    statement = Sign1Message(phdr=protected_header, payload=payload.encode("utf-8"))
-
-    # create the cose_key to sign the statement using the signing key
-    cose_key = {
-        KpKty: KtyEC2,
-        EC2KpCurve: P256,
-        KpKeyOps: [SignOp, VerifyOp],
-        EC2KpD: signing_key.to_string(),
-        EC2KpX: x_part,
-        EC2KpY: y_part,
+    unprotected_header = {
+        X5chain: issuer.x5chain
     }
 
-    cose_key = CoseKey.from_dict(cose_key)
-    statement.key = cose_key
+    # create the statement as a sign1 message using the protected header,
+    # unprotected header, and payload
+    statement = Sign1Message(
+        phdr=protected_header,
+        uhdr=unprotected_header,
+        payload=payload.encode("utf-8")
+    )
 
-    # sign and cbor encode the statement.
-    # NOTE: the encode() function performs the signing automatically
-    signed_statement = statement.encode([None])
+    # HACK: get TBS
+    tbs = statement._sig_structure
 
-    return signed_statement
+    # HACK: this is gross
+    statement._signature = private_key.sign(tbs)
+
+    # encode the statement again to include the signature foisted into the object
+    encoded = statement.encode(sign=False)
+
+    return encoded
 
 
 def main():
     """Creates a signed statement"""
 
     parser = argparse.ArgumentParser(description="Create a signed statement.")
-
-    # signing key file
-    parser.add_argument(
-        "--signing-key-file",
-        type=str,
-        help="filepath to the stored ecdsa P-256 signing key, in pem format.",
-        default="scitt-signing-key.pem",
-    )
 
     # payload-file (a reference to the file that will become the payload of the SCITT Statement)
     parser.add_argument(
@@ -161,14 +147,8 @@ def main():
     parser.add_argument(
         "--subject",
         type=str,
+        required=True,
         help="subject to correlate statements made about an artifact.",
-    )
-
-    # issuer
-    parser.add_argument(
-        "--issuer",
-        type=str,
-        help="issuer who owns the signing key.",
     )
 
     # output file
@@ -181,15 +161,17 @@ def main():
 
     args = parser.parse_args()
 
-    signing_key = open_signing_key(args.signing_key_file)
     payload = open_payload(args.payload_file)
 
+    stm_client = digicert_stm_client.DigiCertSoftwareTrustManagerClient()
+
     signed_statement = create_signed_statement(
-        signing_key,
+        stm_client.retrieve_identity(),
         payload,
         args.subject,
         args.issuer,
-        args.content_type,
+        digicert_stm_client.DigiCertStmPrivateKey(),
+        args.content_type
     )
 
     with open(args.output_file, "wb") as output_file:

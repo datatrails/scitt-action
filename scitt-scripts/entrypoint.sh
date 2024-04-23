@@ -22,13 +22,13 @@ echo "PWD: $PWD"
 
 ls -la $TOKEN_FILE
 
+echo "Sign statement with key protected in Software Trust Manager"
+
 python /scripts/create_signed_statement.py \
   --subject ${3} \
   --payload ${4} \
   --content-type ${5} \
-  --output-file $SIGNED_STATEMENT_FILE \
-  --signing-key-file ${8} \
-  --issuer ${9}
+  --output-file $SIGNED_STATEMENT_FILE
 
 echo "SCITT Register to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
@@ -41,10 +41,10 @@ echo "RESPONSE: $RESPONSE"
 OPERATION_ID=$(echo $RESPONSE | jq  -r .operationID)
 echo "OPERATION_ID: $OPERATION_ID"
 
-# echo "call: /scitt-scripts/check_operation_status.py"
-# python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE
+echo "call: /scripts/check_operation_status.py"
+python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE
 
-# RESPONSE=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE)
-# ENTRY_ID=$(echo $RESPONSE | jq  -r .entryID)
+ENTRY_ID=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE)
+echo "ENTRY_ID :" $ENTRY_ID
 
 # curl https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.feed_id=$SUBJECT | jq
