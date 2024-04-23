@@ -170,7 +170,6 @@ def main():
         stm_client.retrieve_identity(),
         payload,
         args.subject,
-        args.issuer,
         digicert_stm_client.DigiCertStmPrivateKey(),
         args.content_type
     )
