@@ -64,11 +64,11 @@ def create_signed_statement(
     issuer: identity.Identity,
     payload: str,
     subject: str,
-    issuer: str,
+    private_key: key.IssuerPrivateKey,
     content_type: str,
 ) -> bytes:
     """
-    creates a signed statement, given the signing_key, payload, subject and issuer
+    creates a signed statement, given the private key, payload, subject and issuer
     """
 
     ec_public_numbers = issuer.public_key.public_numbers()
@@ -83,8 +83,9 @@ def create_signed_statement(
         KID: issuer.kid.encode(),
         ContentType: content_type,
         HEADER_LABEL_FEED: subject,
+        X5t: issuer.x5t,
         HEADER_LABEL_CWT: {
-            HEADER_LABEL_CWT_ISSUER: issuer,
+            HEADER_LABEL_CWT_ISSUER: issuer.iss,
             HEADER_LABEL_CWT_SUBJECT: subject,
             HEADER_LABEL_CWT_CNF: {
                 HEADER_LABEL_CNF_COSE_KEY: {
