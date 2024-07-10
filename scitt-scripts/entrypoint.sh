@@ -22,7 +22,7 @@ echo "PWD: $PWD"
 
 ls -la $TOKEN_FILE
 
-python /scripts/create_signed_statement.py \
+python /scripts/create_hashed_signed_statement.py \
   --subject ${3} \
   --payload ${4} \
   --content-type ${5} \
