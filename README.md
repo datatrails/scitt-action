@@ -98,7 +98,7 @@ jobs:
       - name: Register as a SCITT Signed Statement
         # Register the Signed Statement wit DataTrails SCITT APIs
         id: register-compliance-scitt-signed-statement
-        uses: datatrails/scitt-action@v0.4
+        uses: datatrails/scitt-action@v0.5
         with:
           datatrails-client_id: ${{ env.DATATRAILS_CLIENT_ID }}
           datatrails-secret: ${{ env.DATATRAILS_SECRET }}
@@ -112,3 +112,17 @@ jobs:
         run: |
           rm ./signingkey.pem
 ```
+
+## Testing Action Updates
+
+To test incremental changes to this github action:
+
+1. Fork https://github.com/datatrails/scitt-action/ into an org you own
+1. Make the changes to your fork of the scitt-action
+1. For the repo you wish to include this action: 
+   - Change the `uses` to reference a branch and commit on your org/repo:
+
+    ```yaml
+            uses: <your-org>/scitt-action@<full-commit>
+            uses: synsation-corp/scitt-action@5b861ed4722787835cdd5e9d86efc698974f1131
+    ```
