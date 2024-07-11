@@ -1,34 +1,35 @@
 name: 'DataTrails SCITT API'
 description: 'Register, Get Receipts and Query Feeds from the DataTrails SCITT API'
 inputs:
+  content-type:
+    description: 'The payload content type (iana mediaType) to be registered on the SCITT Service (eg: application/spdx+json, application/vnd.cyclonedx+json, Scan Result, Attestation)'
+    required: true
   datatrails-client_id:
     description: 'The CLIENT_ID used to access the DataTrails SCITT APIs'
     required: true
   datatrails-secret:
     description: 'The SECRET used to access the DataTrails SCITT APIs'
     required: true
-  subject:
-    description: 'Unique ID for the collection of statements about an artifact'
-    required: true
   payload:
     description: 'The payload file to be registered on the SCITT Service (eg: SBOM, Scan Result, Attestation)'
     required: true
-  content-type:
-    description: 'The payload content type (iana mediaType) to be registered on the SCITT Service (eg: application/spdx+json, application/vnd.cyclonedx+json, Scan Result, Attestation)'
-    required: true
-  signed-statement-file:
-    description: 'File representing the signed SCITT Statement that will be registered on SCITT.'
+  payload_location:
+    description: 'Optional location the content of the payload may be stored.'
     required: false
-    default: 'signed-statement.cbor'
   receipt-file:
     description: 'The file to save the cbor receipt'
     required: false
     default: 'receipt.cbor'
-  signing-key-file:
-    description: 'The .pem file used to sign the statement'
-    required: true
-  issuer:
-    description: 'The name of the issuer, set to CTW_Claims:iss'
+  signed-statement-file:
+    description: 'File representing the signed SCITT Statement that will be registered on SCITT.'
+    required: false
+    default: 'signed-statement.cbor'
+  skip-receipt:
+    description: 'To skip receipt retrieval, set to 1'
+    required: false
+    default: '0'
+  subject:
+    description: 'Unique ID for the collection of statements about an artifact'
     required: true
 outputs:
   token: # id of output
@@ -37,12 +38,13 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
+    - ${{ inputs.content-type }}
     - ${{ inputs.datatrails-client_id }}
     - ${{ inputs.datatrails-secret }}
+    - ${{ inputs.issuer }}
     - ${{ inputs.subject }}
     - ${{ inputs.payload }}
-    - ${{ inputs.content-type }}
-    - ${{ inputs.signed-statement-file }}
+    - ${{ inputs.payload-location}}
     - ${{ inputs.receipt-file }}
+    - ${{ inputs.signed-statement-file }}
     - ${{ inputs.signing-key-file }}
-    - ${{ inputs.issuer }}
