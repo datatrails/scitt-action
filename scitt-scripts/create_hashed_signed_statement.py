@@ -36,8 +36,10 @@ HEADER_LABEL_CNF_COSE_KEY = 1
 
 # Signed Hash envelope header labels from:
 # https://github.com/OR13/draft-steele-cose-hash-envelope/blob/main/draft-steele-cose-hash-envelope.md
-HEADER_LABEL_PAYLOAD_HASH_ALGORITHM = 998
-HEADER_LABEL_LOCATION = 999
+# pre-adoption/private use parameters
+# https://www.iana.org/assignments/cose/cose.xhtml#header-parameters
+HEADER_LABEL_PAYLOAD_HASH_ALGORITHM = -6800
+HEADER_LABEL_LOCATION = -6801
 
 
 def open_signing_key(key_file: str) -> SigningKey:
