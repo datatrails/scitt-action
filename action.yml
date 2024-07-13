@@ -27,6 +27,9 @@ inputs:
     description: 'File representing the signed SCITT Statement that will be registered on SCITT.'
     required: false
     default: 'signed-statement.cbor'
+  signing-key-file:
+    description: 'The .pem file used to sign the statement'
+    required: true
   skip-receipt:
     description: 'To skip receipt retrieval, set to 1'
     required: false
@@ -49,5 +52,6 @@ runs:
     - ${{ inputs.payload-location}}
     - ${{ inputs.receipt-file }}
     - ${{ inputs.signed-statement-file }}
+    - ${{ inputs.signing-key-file }}
     - ${{ inputs.skip-receipt }}
     - ${{ inputs.subject }}
