@@ -10,14 +10,17 @@ inputs:
   datatrails-secret:
     description: 'The SECRET used to access the DataTrails SCITT APIs'
     required: true
-  payload:
+  issuer:
+    description: 'The name of the issuer, set to CTW_Claims:iss'
+    required: true
+  payload-file:
     description: 'The payload file to be registered on the SCITT Service (eg: SBOM, Scan Result, Attestation)'
     required: true
-  payload_location:
+  payload-location:
     description: 'Optional location the content of the payload may be stored.'
     required: false
   receipt-file:
-    description: 'The file to save the cbor receipt'
+    description: 'The filename to save the cbor receipt'
     required: false
     default: 'receipt.cbor'
   signed-statement-file:
@@ -42,9 +45,9 @@ runs:
     - ${{ inputs.datatrails-client_id }}
     - ${{ inputs.datatrails-secret }}
     - ${{ inputs.issuer }}
-    - ${{ inputs.subject }}
-    - ${{ inputs.payload }}
+    - ${{ inputs.payload-file }}
     - ${{ inputs.payload-location}}
     - ${{ inputs.receipt-file }}
     - ${{ inputs.signed-statement-file }}
-    - ${{ inputs.signing-key-file }}
+    - ${{ inputs.skip-receipt }}
+    - ${{ inputs.subject }}

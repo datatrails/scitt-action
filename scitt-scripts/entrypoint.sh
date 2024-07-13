@@ -6,7 +6,7 @@
 # echo "datatrails-secret:       " ${3}
 # echo "issuer:                  " ${4}
 # echo "subject:                 " ${5}
-# echo "payload_file:             " ${6}
+# echo "payload_file:            " ${6}
 # echo "payload-location:        " ${7}
 # echo "receipt-file:            " ${8}
 # echo "signed-statement-file:   " ${9}
@@ -23,6 +23,7 @@ PAYLOAD_LOCATION=${7}
 RECEIPT_FILE=${8}
 SIGNED_STATEMENT_FILE=${9}
 SIGNING_KEY_FILE=${10}
+SKIP_RECEIPT=${11}
 
 TOKEN_FILE="./bearer-token.txt"
 
@@ -43,6 +44,11 @@ python /scripts/create_hashed_signed_statement.py \
   --signing-key-file $SIGNING_KEY_FILE \
   --issuer $ISSUER
 
+if [ ! -f $SIGNED_STATEMENT_FILE ]; then
+  echo "ERROR: Signed Statement: [$SIGNED_STATEMENT_FILE] Not found!"
+  return 404
+fi
+
 echo "Register the SCITT SIgned Statement to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
 RESPONSE=$(curl -X POST -H @$TOKEN_FILE \
@@ -54,10 +60,20 @@ echo "RESPONSE: $RESPONSE"
 OPERATION_ID=$(echo $RESPONSE | jq  -r .operationID)
 echo "OPERATION_ID: $OPERATION_ID"
 
-# echo "call: /scitt-scripts/check_operation_status.py"
-# python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE
+echo "skip-receipt: $SKIP_RECEIPT"
 
-# RESPONSE=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE)
-# ENTRY_ID=$(echo $RESPONSE | jq  -r .entryID)
+if [ -n "$SKIP_RECEIPT" ] && [ $SKIP_RECEIPT = "1" ]; then
+  echo "skipping receipt retrieval"
+else
+  echo "Download the SCITT Receipt: $RECEIPT_FILE"
+  echo "call: /scripts/check_operation_status.py"
+  python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE
+
+  ENTRY_ID=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE)
+  echo "ENTRY_ID :" $ENTRY_ID
+  curl -H @$TOKEN_FILE \
+    https://app.datatrails.ai/archivist/v1/publicscitt/entries/$ENTRY_ID/receipt \
+    -o $RECEIPT_FILE
+fi
 
 # curl https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.subject=$SUBJECT | jq
