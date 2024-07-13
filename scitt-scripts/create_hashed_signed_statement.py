@@ -141,22 +141,6 @@ def main():
 
     parser = argparse.ArgumentParser(description="Create a signed statement.")
 
-    # signing key file
-    parser.add_argument(
-        "--signing-key-file",
-        type=str,
-        help="filepath to the stored ecdsa P-256 signing key, in pem format.",
-        default="scitt-signing-key.pem",
-    )
-
-    # payload-file (a reference to the file that will become the payload of the SCITT Statement)
-    parser.add_argument(
-        "--payload-file",
-        type=str,
-        help="filepath to the content that will be hashed into the payload of the SCITT Statement.",
-        default="scitt-payload.json",
-    )
-
     # content-type
     parser.add_argument(
         "--content-type",
@@ -165,25 +149,11 @@ def main():
         default="application/json",
     )
 
-    # subject
-    parser.add_argument(
-        "--subject",
-        type=str,
-        help="subject to correlate statements made about an artifact.",
-    )
-
     # issuer
     parser.add_argument(
         "--issuer",
         type=str,
         help="issuer who owns the signing key.",
-    )
-
-    # location hint
-    parser.add_argument(
-        "--location-hint",
-        type=str,
-        help="location hint for the original statement that was hashed.",
     )
 
     # output file
@@ -194,18 +164,48 @@ def main():
         default="signed-statement.cbor",
     )
 
+    # payload-file (a reference to the file that will become the payload of the SCITT Statement)
+    parser.add_argument(
+        "--payload-file",
+        type=str,
+        help="filepath to the content that will be hashed into the payload of the SCITT Statement.",
+        default="scitt-payload.json",
+    )
+
+    # payload-location
+    parser.add_argument(
+        "--payload-location",
+        type=str,
+        help="location hint for the original statement that was hashed.",
+    )
+
+    # signing key file
+    parser.add_argument(
+        "--signing-key-file",
+        type=str,
+        help="filepath to the stored ecdsa P-256 signing key, in pem format.",
+        default="scitt-signing-key.pem",
+    )
+
+    # subject
+    parser.add_argument(
+        "--subject",
+        type=str,
+        help="subject to correlate statements made about an artifact.",
+    )
+
     args = parser.parse_args()
 
     signing_key = open_signing_key(args.signing_key_file)
     payload = open_payload(args.payload_file)
 
     signed_statement = create_hashed_signed_statement(
-        signing_key-file,
+        signing_key_file,
         payload,
+        args.payload_location,
         args.subject,
         args.issuer,
         args.content_type,
-        args.location_hint,
     )
 
     with open(args.output_file, "wb") as output_file:
