@@ -200,7 +200,7 @@ def main():
     payload = open_payload(args.payload_file)
 
     signed_statement = create_hashed_signed_statement(
-        signing_key,
+        signing_key-file,
         payload,
         args.subject,
         args.issuer,
