@@ -51,7 +51,7 @@ if [ ! -f $SIGNED_STATEMENT_FILE ]; then
   return 404
 fi
 
-echo "Register the SCITT SIgned Statement to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
+echo "Register the SCITT Signed Statement to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
 RESPONSE=$(curl -X POST  \
                 --data-binary @$SIGNED_STATEMENT_FILE \
@@ -61,6 +61,10 @@ echo "RESPONSE: $RESPONSE"
 
 OPERATION_ID=$(echo $RESPONSE | jq  -r .operationID)
 echo "OPERATION_ID: $OPERATION_ID"
+
+if [ ${#OPERATION_ID} -lt -1 ]
+  return -1
+fi
 
 echo "skip-receipt: $SKIP_RECEIPT"
 
