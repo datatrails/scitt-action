@@ -197,12 +197,12 @@ def main():
     args = parser.parse_args()
 
     signing_key = open_signing_key(args.signing_key_file)
-    payload = open_payload(args.payload_file)
+    payload_contents = open_payload(args.payload_file)
 
     signed_statement = create_hashed_signed_statement(
         content_type=args.content_type,
         issuer=args.issuer,
-        payload=payload,
+        payload=payload_contents,
         payload_location=args.payload_location,
         signing_key=signing_key,
         subject=args.subject
@@ -210,7 +210,7 @@ def main():
 
     with open(args.output_file, "wb") as output_file:
         output_file.write(signed_statement)
-s
+
 
 if __name__ == "__main__":
     main()
