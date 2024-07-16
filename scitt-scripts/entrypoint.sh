@@ -48,12 +48,12 @@ python /scripts/create_hashed_signed_statement.py \
 
 if [ ! -f $SIGNED_STATEMENT_FILE ]; then
   echo "ERROR: Signed Statement: [$SIGNED_STATEMENT_FILE] Not found!"
-  return 404
+  exit 126
 fi
 
 echo "Register the SCITT Signed Statement to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
-RESPONSE=$(curl -X POST  \
+RESPONSE=$(curl -X POST -H @$TOKEN_FILE \
                 --data-binary @$SIGNED_STATEMENT_FILE \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries)
 
@@ -62,8 +62,11 @@ echo "RESPONSE: $RESPONSE"
 OPERATION_ID=$(echo $RESPONSE | jq  -r .operationID)
 echo "OPERATION_ID: $OPERATION_ID"
 
-if [ ${#OPERATION_ID} -lt -1 ]
-  return -1
+if [ ${#OPERATION_ID} -lt 1 ]; then
+  echo "error: OPERATION_ID not found. POST to https://app.datatrails.ai/archivist/v1/publicscitt/entries failed"
+  exit 126
+else
+  exit 0
 fi
 
 echo "skip-receipt: $SKIP_RECEIPT"
@@ -73,10 +76,14 @@ if [ -n "$SKIP_RECEIPT" ] && [ $SKIP_RECEIPT = "1" ]; then
 else
   echo "Download the SCITT Receipt: $RECEIPT_FILE"
   echo "call: /scripts/check_operation_status.py"
-  python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE
-
   ENTRY_ID=$(python /scripts/check_operation_status.py --operation-id $OPERATION_ID --token-file-name $TOKEN_FILE)
   echo "ENTRY_ID :" $ENTRY_ID
+
+  if [ ${#ENTRY_ID} -lt 1 ]; then
+    echo "error: ENTRY_ID not found. check_operation_status.py failed"
+    exit 126
+  fi
+
   curl -H @$TOKEN_FILE \
     https://app.datatrails.ai/archivist/v1/publicscitt/entries/$ENTRY_ID/receipt \
     -o $RECEIPT_FILE
