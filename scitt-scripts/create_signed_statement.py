@@ -36,6 +36,10 @@ HEADER_LABEL_CWT_SUBJECT = 2
 HEADER_LABEL_CWT_CNF = 8
 HEADER_LABEL_CNF_COSE_KEY = 1
 
+# CBOR Object Signing and Encryption (COSE) "typ" (type) Header Parameter
+# https://datatracker.ietf.org/doc/rfc9596/
+HEADER_LABEL_TYPE = 16
+COSE_TYPE="application/hashed+cose"
 
 def open_signing_key(key_file: str) -> SigningKey:
     """
@@ -86,6 +90,7 @@ def create_signed_statement(
     # create a protected header where
     #  the verification key is attached to the cwt claims
     protected_header = {
+        HEADER_LABEL_TYPE: COSE_TYPE,
         Algorithm: Es256,
         KID: b"testkey",
         ContentType: content_type,
