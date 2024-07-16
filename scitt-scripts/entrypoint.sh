@@ -29,7 +29,6 @@ SUBJECT=${11}
 
 TOKEN_FILE="./bearer-token.txt"
 
-
 echo "Create an access token"
 /scripts/create-token.sh ${DATATRAILS_CLIENT_ID} ${DATATRAILS_SECRET_ID} $TOKEN_FILE
 
@@ -43,7 +42,7 @@ python /scripts/create_hashed_signed_statement.py \
   --issuer $ISSUER \
   --output-file $SIGNED_STATEMENT_FILE \
   --payload-file $PAYLOAD_FILE \
-  --payload-location $PAYLOAD_LOCATION \
+  --location $PAYLOAD_LOCATION \
   --signing-key-file $SIGNING_KEY_FILE \
   --subject $SUBJECT
 
