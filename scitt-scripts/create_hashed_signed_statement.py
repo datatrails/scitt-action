@@ -63,12 +63,12 @@ def open_payload(payload_file: str) -> str:
 
 
 def create_hashed_signed_statement(
-    signing_key: SigningKey,
-    payload: str,
-    subject: str,
-    issuer: str,
     content_type: str,
-    location: str,
+    issuer: str,
+    payload: str,
+    payload_location: str,
+    signing_key: SigningKey,
+    subject: str,
 ) -> bytes:
     """
     creates a hashed signed statement, given the signing_key, payload, subject and issuer
@@ -200,17 +200,17 @@ def main():
     payload = open_payload(args.payload_file)
 
     signed_statement = create_hashed_signed_statement(
-        signing_key_file,
-        payload,
-        args.payload_location,
-        args.subject,
-        args.issuer,
-        args.content_type,
+        content_type=args.content_type,
+        issuer=args.issuer,
+        payload=payload,
+        payload_location=args.payload_location,
+        signing_key=signing_key,
+        subject=args.subject
     )
 
     with open(args.output_file, "wb") as output_file:
         output_file.write(signed_statement)
-
+s
 
 if __name__ == "__main__":
     main()

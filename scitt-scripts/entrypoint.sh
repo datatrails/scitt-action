@@ -5,25 +5,25 @@
 # echo "datatrails-client_id:    " ${2}
 # echo "datatrails-secret:       " ${3}
 # echo "issuer:                  " ${4}
-# echo "subject:                 " ${5}
-# echo "payload_file:            " ${6}
-# echo "payload-location:        " ${7}
-# echo "receipt-file:            " ${8}
-# echo "signed-statement-file:   " ${9}
-# echo "signing-key-file:        " ${10}
-# echo "skip-receipt:            " ${11}
+# echo "payload-file:            " ${5}
+# echo "payload-location:        " ${6}
+# echo "receipt-file:            " ${7}
+# echo "signed-statement-file:   " ${8}
+# echo "signing-key-file:        " ${9}
+# echo "skip-receipt:            " ${10}
+# echo "subject:                 " ${11}
 
 CONTENT_TYPE=${1}
 DATATRAILS_CLIENT_ID=${2}
 DATATRAILS_SECRET_ID=${3}
 ISSUER=${4}
-SUBJECT=${5}
-PAYLOAD=${6}
-PAYLOAD_LOCATION=${7}
-RECEIPT_FILE=${8}
-SIGNED_STATEMENT_FILE=${9}
-SIGNING_KEY_FILE=${10}
-SKIP_RECEIPT=${11}
+PAYLOAD_FILE=${5}
+PAYLOAD_LOCATION=${6}
+RECEIPT_FILE=${7}
+SIGNED_STATEMENT_FILE=${8}
+SIGNING_KEY_FILE=${9}
+SKIP_RECEIPT=${10}
+SUBJECT=${11}
 
 TOKEN_FILE="./bearer-token.txt"
 
@@ -37,12 +37,13 @@ echo "Create an access token"
 
 echo "Create a Signed Statement, hashing the payload"
 python /scripts/create_hashed_signed_statement.py \
-  --subject $SUBJECT \
-  --payload $PAYLOAD_FILE \
   --content-type $CONTENT_TYPE \
+  --issuer $ISSUER \
   --output-file $SIGNED_STATEMENT_FILE \
+  --payload-file $PAYLOAD_FILE \
+  --payload-location $PAYLOAD_LOCATION \
   --signing-key-file $SIGNING_KEY_FILE \
-  --issuer $ISSUER
+  --subject $SUBJECT
 
 if [ ! -f $SIGNED_STATEMENT_FILE ]; then
   echo "ERROR: Signed Statement: [$SIGNED_STATEMENT_FILE] Not found!"
