@@ -53,7 +53,7 @@ fi
 
 echo "Register the SCITT SIgned Statement to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
-RESPONSE=$(curl -X POST -H @$TOKEN_FILE_NIL \
+RESPONSE=$(curl -X POST  \
                 --data-binary @$SIGNED_STATEMENT_FILE \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries)
 
