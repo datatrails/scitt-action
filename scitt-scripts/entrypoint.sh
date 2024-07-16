@@ -42,7 +42,7 @@ python /scripts/create_hashed_signed_statement.py \
   --issuer $ISSUER \
   --output-file $SIGNED_STATEMENT_FILE \
   --payload-file $PAYLOAD_FILE \
-  --location $PAYLOAD_LOCATION \
+  --payload-location $PAYLOAD_LOCATION \
   --signing-key-file $SIGNING_KEY_FILE \
   --subject $SUBJECT
 
@@ -53,7 +53,7 @@ fi
 
 echo "Register the SCITT SIgned Statement to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
-RESPONSE=$(curl -X POST -H @$TOKEN_FILE \
+RESPONSE=$(curl -X POST -H @$TOKEN_FILE_NIL \
                 --data-binary @$SIGNED_STATEMENT_FILE \
                 https://app.datatrails.ai/archivist/v1/publicscitt/entries)
 
