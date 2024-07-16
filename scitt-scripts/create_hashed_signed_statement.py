@@ -105,7 +105,7 @@ def create_hashed_signed_statement(
             },
         },
         HEADER_LABEL_PAYLOAD_HASH_ALGORITHM: -16,  # for sha256
-        HEADER_LABEL_LOCATION: location,
+        HEADER_LABEL_LOCATION: payload_location,
     }
 
     # now create a sha256 hash of the payload

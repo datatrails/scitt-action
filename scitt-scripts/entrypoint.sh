@@ -1,5 +1,7 @@
 #!/bin/bash -l
 
+set -e
+
 # Uncomment for debugging
 # echo "content-type:            " ${1}
 # echo "datatrails-client_id:    " ${2}
