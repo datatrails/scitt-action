@@ -2,6 +2,10 @@
 
 Secure your Software Supply Chain and your Content Authenticity with immutable data trails. This GitHub Action uses DataTrails implementation of the IETF Supply Chain, Integrity and Trust ([SCITT](https://scitt.io)) APIs.
 
+**NOTE:**:  
+This SCITT GitHub Action is in Preview, pending adoption of the [SCITT Reference APIs (SCRAPI)](https://datatracker.ietf.org/doc/draft-ietf-scitt-scrapi/).
+To use a production supported implementation, please contact [DataTrails](https://www.datatrails.ai/contactus/) for more info.
+
 ## Getting Started
 
 To create immutable data trails, an account with a `Client_ID` and `Secret` are required.
