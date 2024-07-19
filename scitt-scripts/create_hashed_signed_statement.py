@@ -36,9 +36,15 @@ HEADER_LABEL_CNF_COSE_KEY = 1
 
 # Signed Hash envelope header labels from:
 # https://github.com/OR13/draft-steele-cose-hash-envelope/blob/main/draft-steele-cose-hash-envelope.md
-HEADER_LABEL_PAYLOAD_HASH_ALGORITHM = 998
-HEADER_LABEL_LOCATION = 999
+# pre-adoption/private use parameters
+# https://www.iana.org/assignments/cose/cose.xhtml#header-parameters
+HEADER_LABEL_PAYLOAD_HASH_ALGORITHM = -6800
+HEADER_LABEL_LOCATION = -6801
 
+# CBOR Object Signing and Encryption (COSE) "typ" (type) Header Parameter
+# https://datatracker.ietf.org/doc/rfc9596/
+HEADER_LABEL_TYPE = 16
+COSE_TYPE="application/hashed+cose"
 
 def open_signing_key(key_file: str) -> SigningKey:
     """
@@ -61,12 +67,12 @@ def open_payload(payload_file: str) -> str:
 
 
 def create_hashed_signed_statement(
-    signing_key: SigningKey,
-    payload: str,
-    subject: str,
-    issuer: str,
     content_type: str,
-    location: str,
+    issuer: str,
+    payload: str,
+    payload_location: str,
+    signing_key: SigningKey,
+    subject: str,
 ) -> bytes:
     """
     creates a hashed signed statement, given the signing_key, payload, subject and issuer
@@ -87,6 +93,7 @@ def create_hashed_signed_statement(
     # create a protected header where
     #  the verification key is attached to the cwt claims
     protected_header = {
+        HEADER_LABEL_TYPE: COSE_TYPE,
         Algorithm: Es256,
         KID: b"testkey",
         ContentType: content_type,
@@ -103,7 +110,7 @@ def create_hashed_signed_statement(
             },
         },
         HEADER_LABEL_PAYLOAD_HASH_ALGORITHM: -16,  # for sha256
-        HEADER_LABEL_LOCATION: location,
+        HEADER_LABEL_LOCATION: payload_location,
     }
 
     # now create a sha256 hash of the payload
@@ -139,22 +146,6 @@ def main():
 
     parser = argparse.ArgumentParser(description="Create a signed statement.")
 
-    # signing key file
-    parser.add_argument(
-        "--signing-key-file",
-        type=str,
-        help="filepath to the stored ecdsa P-256 signing key, in pem format.",
-        default="scitt-signing-key.pem",
-    )
-
-    # payload-file (a reference to the file that will become the payload of the SCITT Statement)
-    parser.add_argument(
-        "--payload-file",
-        type=str,
-        help="filepath to the content that will be hashed into the payload of the SCITT Statement.",
-        default="scitt-payload.json",
-    )
-
     # content-type
     parser.add_argument(
         "--content-type",
@@ -163,25 +154,11 @@ def main():
         default="application/json",
     )
 
-    # subject
-    parser.add_argument(
-        "--subject",
-        type=str,
-        help="subject to correlate statements made about an artifact.",
-    )
-
     # issuer
     parser.add_argument(
         "--issuer",
         type=str,
         help="issuer who owns the signing key.",
-    )
-
-    # location hint
-    parser.add_argument(
-        "--location-hint",
-        type=str,
-        help="location hint for the original statement that was hashed.",
     )
 
     # output file
@@ -192,18 +169,48 @@ def main():
         default="signed-statement.cbor",
     )
 
+    # payload-file (a reference to the file that will become the payload of the SCITT Statement)
+    parser.add_argument(
+        "--payload-file",
+        type=str,
+        help="filepath to the content that will be hashed into the payload of the SCITT Statement.",
+        default="scitt-payload.json",
+    )
+
+    # payload-location
+    parser.add_argument(
+        "--payload-location",
+        type=str,
+        help="location hint for the original statement that was hashed.",
+    )
+
+    # signing key file
+    parser.add_argument(
+        "--signing-key-file",
+        type=str,
+        help="filepath to the stored ecdsa P-256 signing key, in pem format.",
+        default="scitt-signing-key.pem",
+    )
+
+    # subject
+    parser.add_argument(
+        "--subject",
+        type=str,
+        help="subject to correlate statements made about an artifact.",
+    )
+
     args = parser.parse_args()
 
     signing_key = open_signing_key(args.signing_key_file)
-    payload = open_payload(args.payload_file)
+    payload_contents = open_payload(args.payload_file)
 
     signed_statement = create_hashed_signed_statement(
-        signing_key,
-        payload,
-        args.subject,
-        args.issuer,
-        args.content_type,
-        args.location_hint,
+        content_type=args.content_type,
+        issuer=args.issuer,
+        payload=payload_contents,
+        payload_location=args.payload_location,
+        signing_key=signing_key,
+        subject=args.subject
     )
 
     with open(args.output_file, "wb") as output_file:
