@@ -54,7 +54,8 @@ echo "Register the SCITT Signed Statement to https://app.datatrails.ai/archivist
 
 python /scripts/register_signed_statement.py \
       --signed-statement-file $SIGNED_STATEMENT_FILE \
-      --output-file $TRANSPARENT_STATEMENT_FILE
+      --output-file $TRANSPARENT_STATEMENT_FILE \
+      --log-level INFO
 
 python /scripts/dump_cbor.py \
       --input $TRANSPARENT_STATEMENT_FILE
