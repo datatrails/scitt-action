@@ -40,6 +40,7 @@ HEADER_LABEL_CNF_COSE_KEY = 1
 # https://www.iana.org/assignments/cose/cose.xhtml#header-parameters
 HEADER_LABEL_PAYLOAD_HASH_ALGORITHM = -6800
 HEADER_LABEL_LOCATION = -6801
+HEADER_LABEL_PAYLOAD_PRE_CONTENT_TYPE = -6802
 
 # CBOR Object Signing and Encryption (COSE) "typ" (type) Header Parameter
 # https://datatracker.ietf.org/doc/rfc9596/
@@ -96,7 +97,7 @@ def create_hashed_signed_statement(
         HEADER_LABEL_TYPE: COSE_TYPE,
         Algorithm: Es256,
         KID: b"testkey",
-        ContentType: content_type,
+        HEADER_LABEL_PAYLOAD_PRE_CONTENT_TYPE: content_type,
         HEADER_LABEL_CWT: {
             HEADER_LABEL_CWT_ISSUER: issuer,
             HEADER_LABEL_CWT_SUBJECT: subject,
@@ -150,7 +151,7 @@ def main():
     parser.add_argument(
         "--content-type",
         type=str,
-        help="The iana.org media type for the payload",
+        help="The iana.org media type for the payload file",
         default="application/json",
     )
 
