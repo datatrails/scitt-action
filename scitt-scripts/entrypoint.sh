@@ -15,8 +15,8 @@ set -e
 # echo "subject:                   " ${10}
 
 CONTENT_TYPE=${1}
-DATATRAILS_CLIENT_ID=${2}
-DATATRAILS_SECRET_ID=${3}
+export DATATRAILS_CLIENT_ID=${2}
+export DATATRAILS_CLIENT_SECRET=${3}
 ISSUER=${4}
 PAYLOAD_FILE=${5}
 PAYLOAD_LOCATION=${6}
@@ -29,7 +29,7 @@ SIGNED_STATEMENT_FILE="signed-statement.cbor"
 TOKEN_FILE="./bearer-token.txt"
 
 echo "Create an access token"
-/scripts/create-token.sh ${DATATRAILS_CLIENT_ID} ${DATATRAILS_SECRET_ID} $TOKEN_FILE
+/scripts/create-token.sh ${DATATRAILS_CLIENT_ID} ${DATATRAILS_CLIENT_SECRET} $TOKEN_FILE
 
 # ls -a
 
