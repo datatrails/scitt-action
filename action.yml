@@ -19,14 +19,10 @@ inputs:
   payload-location:
     description: 'Optional location the content of the payload may be stored.'
     required: false
-  receipt-file:
-    description: 'The filename to save the cbor receipt'
+  transparent-statement-file:
+    description: 'The filename to save the cbor transparent statement, which includes the signed-statement and the receipt'
     required: false
-    default: 'receipt.cbor'
-  signed-statement-file:
-    description: 'File representing the signed SCITT Statement that will be registered on SCITT.'
-    required: false
-    default: 'signed-statement.cbor'
+    default: 'transparent-statement.cbor'
   signing-key-file:
     description: 'The .pem file used to sign the statement'
     required: true
@@ -50,8 +46,7 @@ runs:
     - ${{ inputs.issuer }}
     - ${{ inputs.payload-file }}
     - ${{ inputs.payload-location}}
-    - ${{ inputs.receipt-file }}
-    - ${{ inputs.signed-statement-file }}
+    - ${{ inputs.transparent-statement-file }}
     - ${{ inputs.signing-key-file }}
     - ${{ inputs.skip-receipt }}
     - ${{ inputs.subject }}
