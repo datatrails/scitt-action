@@ -52,11 +52,11 @@ fi
 
 echo "Register the SCITT Signed Statement to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
 
-python scitt/register_signed_statement.py \
+python scripts/register_signed_statement.py \
       --signed-statement-file $SIGNED_STATEMENT_FILE \
       --output-file $TRANSPARENT_STATEMENT_FILE
 
-python scitt/dump_cbor.py \
+python scripts/dump_cbor.py \
       --input $TRANSPARENT_STATEMENT_FILE
 
 # curl https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.subject=$SUBJECT | jq
