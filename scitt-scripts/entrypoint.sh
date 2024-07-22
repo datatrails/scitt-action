@@ -5,7 +5,7 @@ set -e
 # Uncomment for debugging
 # echo "content-type:              " ${1}
 # echo "datatrails-client_id:      " ${2}
-# echo "datatrails-secret:         " ${3}
+# echo "datatrails-client_secret:  " ${3}
 # echo "issuer:                    " ${4}
 # echo "payload-file:              " ${5}
 # echo "payload-location:          " ${6}
