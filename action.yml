@@ -7,7 +7,7 @@ inputs:
   datatrails-client_id:
     description: 'The CLIENT_ID used to access the DataTrails SCITT APIs'
     required: true
-  datatrails-secret:
+  datatrails-client_secret:
     description: 'The SECRET used to access the DataTrails SCITT APIs'
     required: true
   issuer:
@@ -19,10 +19,6 @@ inputs:
   payload-location:
     description: 'Optional location the content of the payload may be stored.'
     required: false
-  transparent-statement-file:
-    description: 'The filename to save the cbor transparent statement, which includes the signed-statement and the receipt'
-    required: false
-    default: 'transparent-statement.cbor'
   signing-key-file:
     description: 'The .pem file used to sign the statement'
     required: true
@@ -33,6 +29,10 @@ inputs:
   subject:
     description: 'Unique ID for the collection of statements about an artifact'
     required: true
+  transparent-statement-file:
+    description: 'The filename to save the cbor transparent statement, which includes the signed-statement and the receipt'
+    required: false
+    default: 'transparent-statement.cbor'
 outputs:
   token: # id of output
     description: 'the token used to authenticate'
@@ -42,7 +42,7 @@ runs:
   args:
     - ${{ inputs.content-type }}
     - ${{ inputs.datatrails-client_id }}
-    - ${{ inputs.datatrails-secret }}
+    - ${{ inputs.datatrails-client_secret }}
     - ${{ inputs.issuer }}
     - ${{ inputs.payload-file }}
     - ${{ inputs.payload-location}}
