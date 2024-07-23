@@ -74,7 +74,7 @@ on:
 
 env:
   DATATRAILS_CLIENT_ID: ${{ secrets.DATATRAILS_CLIENT_ID }}
-  DATATRAILS_SECRET: ${{ secrets.DATATRAILS_SECRET }}
+  DATATRAILS_CLIENT_SECRET: ${{ secrets.DATATRAILS_CLIENT_SECRET }}
   SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
   SUBJECT: "synsation.io/myproduct-v1.0"
   ISSUER: "synsation.io"
@@ -105,12 +105,17 @@ jobs:
         uses: datatrails/scitt-action@v0.5
         with:
           datatrails-client_id: ${{ env.DATATRAILS_CLIENT_ID }}
-          datatrails-secret: ${{ env.DATATRAILS_SECRET }}
-          subject: ${{ env.SUBJECT }}
-          payload: "./buildOutput/attestation.json"
-          content-type: "application/vnd.unknown.attestation+json"
-          signing-key-file: "./signingkey.pem"
+          datatrails-client_secret: ${{ env.DATATRAILS_CLIENT_SECRET }}
           issuer: ${{ env.ISSUER}}
+          payload-file: "./buildOutput/attestation.json"
+          payload-location: ${{ steps.upload-attestation.outputs.artifact-url }}
+          signing-key-file: "./signingkey.pem"
+          subject: ${{ env.SUBJECT }}
+      - name: upload-transparent-statement
+        uses: actions/upload-artifact@v4
+        with:
+          name: transparent-statement
+          path: transparent-statement.cbor
       - name: cleanup-keys
         shell: bash
         run: |

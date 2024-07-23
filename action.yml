@@ -22,10 +22,6 @@ inputs:
   signing-key-file:
     description: 'The .pem file used to sign the statement'
     required: true
-  skip-receipt:
-    description: 'To skip receipt retrieval, set to 1'
-    required: false
-    default: '0'
   subject:
     description: 'Unique ID for the collection of statements about an artifact'
     required: true
