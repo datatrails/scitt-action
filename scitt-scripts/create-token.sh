@@ -1,24 +1,23 @@
 #!/bin/bash -l
 
-# echo "datatrails-client_id: " ${1}
-# echo "datatrails-secret:    " ${2}
-# echo "token-file:           " ${3}
+set -e
 
-if [ -z "$3" ]; then
+# echo "token-file:           " ${1}
+
+if [ -z "$1" ]; then
   TOKEN_FILE=$HOME/.datatrails/bearer-token.txt
   mkdir -p $HOME/.datatrails
   chmod 0700 $HOME/.datatrails
 else
-  TOKEN_FILE=${3}
+  TOKEN_FILE=${1}
 fi
 
 RESPONSE=$(curl -s -S https://app.datatrails.ai/archivist/iam/v1/appidp/token \
             --data-urlencode "grant_type=client_credentials" \
-            --data-urlencode "client_id=${1}" \
-            --data-urlencode "client_secret=${2}")
+            --data-urlencode "client_id=$DATATRAILS_CLIENT_ID" \
+            --data-urlencode "client_secret=$DATATRAILS_CLIENT_SECRET")
 
 if [[ $RESPONSE == *"access_token"* ]]; then
-  #rm $TOKEN_FILE
 
   TOKEN=$(echo -n $RESPONSE | jq -r .access_token)
   echo "PWD: $PWD"

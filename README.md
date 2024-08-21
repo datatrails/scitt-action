@@ -60,7 +60,7 @@ The following example shows a minimal implementation.
 Three GitHub Action Secrets are used:
 
 - `secrets.DATATRAILS_CLIENT_ID`
-- `secrets.DATATRAILS_SECRET`
+- `secrets.DATATRAILS_CLIENT_SECRET`
 - `secrets.SIGNING_KEY`
 
 Sample github `action.yaml`
@@ -69,13 +69,14 @@ Sample github `action.yaml`
 name: Register SCITT Statement
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
+  # push:
+    # branches: [ "main" ]
 
 env:
   DATATRAILS_CLIENT_ID: ${{ secrets.DATATRAILS_CLIENT_ID }}
-  DATATRAILS_SECRET: ${{ secrets.DATATRAILS_SECRET }}
-  SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+  DATATRAILS_CLIENT_SECRET: ${{ secrets.DATATRAILS_CLIENT_SECRET }}
+  SIGNING_KEY: ${{ secrets.SYNSATION_SIGNING_KEY }}
   SUBJECT: "synsation.io/myproduct-v1.0"
   ISSUER: "synsation.io"
 jobs:
@@ -99,18 +100,28 @@ jobs:
         # A sample compliance file. Replace with an SBOM, in-toto statement, image for content authenticity, ...
         run: |
           echo '{"compliance.42":"true","software.eol":"2025-03-15"}' >> ./buildOutput/attestation.json
+      - name: Upload Attestation
+        id: upload-attestation
+        uses: actions/upload-artifact@v4
+        with:
+          name: attestation.json
+          path: ./buildOutput/attestation.json
       - name: Register as a SCITT Signed Statement
         # Register the Signed Statement wit DataTrails SCITT APIs
         id: register-compliance-scitt-signed-statement
-        uses: datatrails/scitt-action@v0.5
+        uses: datatrails/scitt-action@v0.6.0
         with:
-          datatrails-client_id: ${{ env.DATATRAILS_CLIENT_ID }}
-          datatrails-secret: ${{ env.DATATRAILS_SECRET }}
-          subject: ${{ env.SUBJECT }}
-          payload: "./buildOutput/attestation.json"
           content-type: "application/vnd.unknown.attestation+json"
-          signing-key-file: "./signingkey.pem"
+          payload-file: "./buildOutput/attestation.json"
+          payload-location: ${{ steps.upload-attestation.outputs.artifact-url }}
+          subject: ${{ env.SUBJECT }}
           issuer: ${{ env.ISSUER}}
+          signing-key-file: "./signingkey.pem"
+      - name: upload-transparent-statement
+        uses: actions/upload-artifact@v4
+        with:
+          name: transparent-statement
+          path: transparent-statement.cbor
       - name: cleanup-keys
         shell: bash
         run: |
@@ -123,10 +134,11 @@ To test incremental changes to this github action:
 
 1. Fork https://github.com/datatrails/scitt-action/ into an org you own
 1. Make the changes to your fork of the scitt-action
-1. For the repo you wish to include this action: 
-   - Change the `uses` to reference a branch and commit on your org/repo:
+1. For the repo you wish to include this action:
+   - Change the `uses` to reference a branch or commit on your org/repo:
 
     ```yaml
             uses: <your-org>/scitt-action@<full-commit>
+            uses: synsation-corp/scitt-action@featurebranch
             uses: synsation-corp/scitt-action@5b861ed4722787835cdd5e9d86efc698974f1131
     ```
