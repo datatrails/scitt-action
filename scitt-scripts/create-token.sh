@@ -4,7 +4,7 @@ set -e
 
 # echo "token-file:           " ${1}
 
-if [ -z "$3" ]; then
+if [ -z "$1" ]; then
   TOKEN_FILE=$HOME/.datatrails/bearer-token.txt
   mkdir -p $HOME/.datatrails
   chmod 0700 $HOME/.datatrails
