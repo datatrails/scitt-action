@@ -69,9 +69,9 @@ Sample github `action.yaml`
 name: Register SCITT Statement
 
 on:
-  push:
-    branches: [ "main" ]
-
+  workflow_dispatch:
+  # push:
+  #   branches: [ "main" ]
 env:
   DATATRAILS_CLIENT_ID: ${{ secrets.DATATRAILS_CLIENT_ID }}
   DATATRAILS_CLIENT_SECRET: ${{ secrets.DATATRAILS_CLIENT_SECRET }}
@@ -108,7 +108,8 @@ jobs:
       - name: Register as a SCITT Signed Statement
         # Register the Signed Statement wit DataTrails SCITT APIs
         id: register-compliance-scitt-signed-statement
-        uses: datatrails/scitt-action@v0.5.0
+        # uses: datatrails/scitt-action@v0.5.0
+        uses: datatrails/scitt-action@hashed-payload
         with:
           content-type: "application/vnd.unknown.attestation+json"
           payload_file: "./buildOutput/attestation.json"
@@ -128,10 +129,11 @@ To test incremental changes to this github action:
 
 1. Fork https://github.com/datatrails/scitt-action/ into an org you own
 1. Make the changes to your fork of the scitt-action
-1. For the repo you wish to include this action: 
-   - Change the `uses` to reference a branch and commit on your org/repo:
+1. For the repo you wish to include this action:
+   - Change the `uses` to reference a branch or commit on your org/repo:
 
     ```yaml
             uses: <your-org>/scitt-action@<full-commit>
+            uses: synsation-corp/scitt-action@featurebranch
             uses: synsation-corp/scitt-action@5b861ed4722787835cdd5e9d86efc698974f1131
     ```
