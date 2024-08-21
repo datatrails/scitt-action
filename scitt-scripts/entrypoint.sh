@@ -14,15 +14,15 @@ SIGNED_STATEMENT_FILE="signed-statement.cbor"
 TOKEN_FILE="./bearer-token.txt"
 
 # Uncomment for debugging
-echo "CONTENT_TYPE:              " ${CONTENT_TYPE}
-echo "PAYLOAD_FILE:              " ${PAYLOAD_FILE}
-echo "PAYLOAD_LOCATION:          " ${PAYLOAD_LOCATION}
-echo "SUBJECT:                   " ${SUBJECT}
-echo "TRANSPARENT_STATEMENT_FILE:" ${TRANSPARENT_STATEMENT_FILE}
-echo "ISSUER:                    " ${ISSUER}
-echo "SIGNING_KEY_FILE:          " ${SIGNING_KEY_FILE}
-echo "SIGNED_STATEMENT_FILE:     " ${SIGNED_STATEMENT_FILE}
-echo "TOKEN_FILE:                " ${TOKEN_FILE}
+# echo "CONTENT_TYPE:              " ${CONTENT_TYPE}
+# echo "PAYLOAD_FILE:              " ${PAYLOAD_FILE}
+# echo "PAYLOAD_LOCATION:          " ${PAYLOAD_LOCATION}
+# echo "SUBJECT:                   " ${SUBJECT}
+# echo "TRANSPARENT_STATEMENT_FILE:" ${TRANSPARENT_STATEMENT_FILE}
+# echo "ISSUER:                    " ${ISSUER}
+# echo "SIGNING_KEY_FILE:          " ${SIGNING_KEY_FILE}
+# echo "SIGNED_STATEMENT_FILE:     " ${SIGNED_STATEMENT_FILE}
+# echo "TOKEN_FILE:                " ${TOKEN_FILE}
 
 if [ ! -f $PAYLOAD_FILE ]; then
   echo "ERROR: Payload File: [$PAYLOAD_FILE] Not found!"

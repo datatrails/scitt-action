@@ -71,11 +71,12 @@ name: Register SCITT Statement
 on:
   workflow_dispatch:
   # push:
-  #   branches: [ "main" ]
+    # branches: [ "main" ]
+
 env:
   DATATRAILS_CLIENT_ID: ${{ secrets.DATATRAILS_CLIENT_ID }}
   DATATRAILS_CLIENT_SECRET: ${{ secrets.DATATRAILS_CLIENT_SECRET }}
-  SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+  SIGNING_KEY: ${{ secrets.SYNSATION_SIGNING_KEY }}
   SUBJECT: "synsation.io/myproduct-v1.0"
   ISSUER: "synsation.io"
 jobs:
@@ -108,15 +109,19 @@ jobs:
       - name: Register as a SCITT Signed Statement
         # Register the Signed Statement wit DataTrails SCITT APIs
         id: register-compliance-scitt-signed-statement
-        # uses: datatrails/scitt-action@v0.5.0
-        uses: datatrails/scitt-action@hashed-payload
+        uses: datatrails/scitt-action@v0.6.0
         with:
           content-type: "application/vnd.unknown.attestation+json"
-          payload_file: "./buildOutput/attestation.json"
-          payload_location: ${{ steps.upload-attestation.outputs.artifact-url }}
+          payload-file: "./buildOutput/attestation.json"
+          payload-location: ${{ steps.upload-attestation.outputs.artifact-url }}
           subject: ${{ env.SUBJECT }}
           issuer: ${{ env.ISSUER}}
           signing-key-file: "./signingkey.pem"
+      - name: upload-transparent-statement
+        uses: actions/upload-artifact@v4
+        with:
+          name: transparent-statement
+          path: transparent-statement.cbor
       - name: cleanup-keys
         shell: bash
         run: |
