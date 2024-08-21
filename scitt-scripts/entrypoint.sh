@@ -2,15 +2,6 @@
 
 set -e
 
-# Uncomment for debugging
-# echo "content-type:              " ${1}
-# echo "payload-file:              " ${5}
-# echo "payload-location:          " ${3}
-# echo "subject:                   " ${4}
-# echo "transparent-statement-file:" ${5}
-# echo "issuer:                    " ${6}
-# echo "signing-key-file:          " ${7}
-
 CONTENT_TYPE=${1}
 PAYLOAD_FILE=${2}
 PAYLOAD_LOCATION=${3}
@@ -21,6 +12,17 @@ SIGNING_KEY_FILE=${7}
 
 SIGNED_STATEMENT_FILE="signed-statement.cbor"
 TOKEN_FILE="./bearer-token.txt"
+
+# Uncomment for debugging
+echo "CONTENT_TYPE:              " ${CONTENT_TYPE}
+echo "PAYLOAD_FILE:              " ${PAYLOAD_FILE}
+echo "PAYLOAD_LOCATION:          " ${PAYLOAD_LOCATION}
+echo "SUBJECT:                   " ${SUBJECT}
+echo "TRANSPARENT_STATEMENT_FILE:" ${TRANSPARENT_STATEMENT_FILE}
+echo "ISSUER:                    " ${ISSUER}
+echo "SIGNING_KEY_FILE:          " ${SIGNING_KEY_FILE}
+echo "SIGNED_STATEMENT_FILE:     " ${SIGNED_STATEMENT_FILE}
+echo "TOKEN_FILE:                " ${TOKEN_FILE}
 
 if [ ! -f $PAYLOAD_FILE ]; then
   echo "ERROR: Payload File: [$PAYLOAD_FILE] Not found!"
