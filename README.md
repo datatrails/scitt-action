@@ -99,15 +99,22 @@ jobs:
         # A sample compliance file. Replace with an SBOM, in-toto statement, image for content authenticity, ...
         run: |
           echo '{"compliance.42":"true","software.eol":"2025-03-15"}' >> ./buildOutput/attestation.json
+      - name: Upload Attestation
+        id: upload-attestation
+        uses: actions/upload-artifact@v4
+        with:
+          name: attestation.json
+          path: ./buildOutput/attestation.json
       - name: Register as a SCITT Signed Statement
         # Register the Signed Statement wit DataTrails SCITT APIs
         id: register-compliance-scitt-signed-statement
         uses: datatrails/scitt-action@v0.5.0
         with:
           content-type: "application/vnd.unknown.attestation+json"
-          issuer: ${{ env.ISSUER}}
-          payload: "./buildOutput/attestation.json"
+          payload_file: "./buildOutput/attestation.json"
+          payload_location: ${{ steps.upload-attestation.outputs.artifact-url }}
           subject: ${{ env.SUBJECT }}
+          issuer: ${{ env.ISSUER}}
           signing-key-file: "./signingkey.pem"
       - name: cleanup-keys
         shell: bash
