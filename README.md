@@ -60,7 +60,7 @@ The following example shows a minimal implementation.
 Three GitHub Action Secrets are used:
 
 - `secrets.DATATRAILS_CLIENT_ID`
-- `secrets.DATATRAILS_SECRET`
+- `secrets.DATATRAILS_CLIENT_SECRET`
 - `secrets.SIGNING_KEY`
 
 Sample github `action.yaml`
@@ -74,7 +74,7 @@ on:
 
 env:
   DATATRAILS_CLIENT_ID: ${{ secrets.DATATRAILS_CLIENT_ID }}
-  DATATRAILS_SECRET: ${{ secrets.DATATRAILS_SECRET }}
+  DATATRAILS_CLIENT_SECRET: ${{ secrets.DATATRAILS_CLIENT_SECRET }}
   SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
   SUBJECT: "synsation.io/myproduct-v1.0"
   ISSUER: "synsation.io"
@@ -102,15 +102,13 @@ jobs:
       - name: Register as a SCITT Signed Statement
         # Register the Signed Statement wit DataTrails SCITT APIs
         id: register-compliance-scitt-signed-statement
-        uses: datatrails/scitt-action@v0.5
+        uses: datatrails/scitt-action@v0.5.0
         with:
-          datatrails-client_id: ${{ env.DATATRAILS_CLIENT_ID }}
-          datatrails-secret: ${{ env.DATATRAILS_SECRET }}
-          subject: ${{ env.SUBJECT }}
-          payload: "./buildOutput/attestation.json"
           content-type: "application/vnd.unknown.attestation+json"
-          signing-key-file: "./signingkey.pem"
           issuer: ${{ env.ISSUER}}
+          payload: "./buildOutput/attestation.json"
+          subject: ${{ env.SUBJECT }}
+          signing-key-file: "./signingkey.pem"
       - name: cleanup-keys
         shell: bash
         run: |

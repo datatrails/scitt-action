@@ -18,7 +18,6 @@ from pycose.keys import CoseKey
 
 from ecdsa import SigningKey, VerifyingKey
 
-
 # CWT header label comes from version 4 of the scitt architecture document
 # https://www.ietf.org/archive/id/draft-ietf-scitt-architecture-04.html#name-issuer-identity
 HEADER_LABEL_CWT = 13
@@ -32,7 +31,6 @@ HEADER_LABEL_CWT_SUBJECT = 2
 # https://datatracker.ietf.org/doc/html/rfc8747#name-confirmation-claim
 HEADER_LABEL_CWT_CNF = 8
 HEADER_LABEL_CNF_COSE_KEY = 1
-
 
 # Signed Hash envelope header labels from:
 # https://github.com/OR13/draft-steele-cose-hash-envelope/blob/main/draft-steele-cose-hash-envelope.md
@@ -154,21 +152,6 @@ def main():
         default="application/json",
     )
 
-    # issuer
-    parser.add_argument(
-        "--issuer",
-        type=str,
-        help="issuer who owns the signing key.",
-    )
-
-    # output file
-    parser.add_argument(
-        "--output-file",
-        type=str,
-        help="name of the output file to store the signed statement.",
-        default="signed-statement.cbor",
-    )
-
     # payload-file (a reference to the file that will become the payload of the SCITT Statement)
     parser.add_argument(
         "--payload-file",
@@ -184,19 +167,34 @@ def main():
         help="location hint for the original statement that was hashed.",
     )
 
+    # subject
+    parser.add_argument(
+        "--subject",
+        type=str,
+        help="subject to correlate statements made about an artifact.",
+    )
+
+    # output file
+    parser.add_argument(
+        "--output-file",
+        type=str,
+        help="name of the output file to store the signed statement.",
+        default="signed-statement.cbor",
+    )
+
+    # issuer
+    parser.add_argument(
+        "--issuer",
+        type=str,
+        help="issuer who owns the signing key.",
+    )
+
     # signing key file
     parser.add_argument(
         "--signing-key-file",
         type=str,
         help="filepath to the stored ecdsa P-256 signing key, in pem format.",
         default="scitt-signing-key.pem",
-    )
-
-    # subject
-    parser.add_argument(
-        "--subject",
-        type=str,
-        help="subject to correlate statements made about an artifact.",
     )
 
     args = parser.parse_args()
