@@ -111,7 +111,7 @@ jobs:
       - name: Register as a SCITT Signed Statement
         # Register the Signed Statement wit DataTrails SCITT APIs
         id: register-compliance-scitt-signed-statement
-        uses: datatrails/scitt-action@v0.6.0
+        uses: datatrails/scitt-action@v0.6.1
         with:
           content-type: "application/vnd.unknown.attestation+json"
           payload-file: "./buildOutput/attestation.json"
