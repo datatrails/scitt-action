@@ -1,5 +1,8 @@
 name: 'DataTrails SCITT API'
 description: 'Register, Get Receipts and Query Feeds from the DataTrails SCITT API'
+branding:
+  icon: 'check'
+  color: 'blue'
 inputs:
   content-type:
     description: 'The payload content type (iana mediaType) to be registered on the SCITT Service (eg: application/spdx+json, application/vnd.cyclonedx+json, Scan Result, Attestation)'
