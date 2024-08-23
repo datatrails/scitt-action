@@ -53,15 +53,17 @@ See [Signed Statement Issuance and Registration](https://datatracker.ietf.org/do
 **Required** The name of the issuer, set to `CTW_Claims:iss`.  
 See [Signed Statement Envelope](https://datatracker.ietf.org/doc/html/draft-ietf-scitt-architecture#name-signed-statement-envelope).
 
-## Example usage
+## Example Usage
 
-The following example shows a minimal implementation.
+The following example shows a minimal implementation for registering SCITT Signed Statements.
 
 Three GitHub Action Secrets are used:
 
 - `secrets.DATATRAILS_CLIENT_ID`
 - `secrets.DATATRAILS_CLIENT_SECRET`
 - `secrets.SIGNING_KEY`
+
+### Registering Signed Statements
 
 Sample github `action.yaml`
 
@@ -128,6 +130,20 @@ jobs:
           rm ./signingkey.pem
 ```
 
+### Querying DataTrails Events
+
+Registered SCITT Statements are available as [DataTrails Events][datatrails-events].
+
+> **NOTE**: As the [SCITT Reference API][scrapi] queries mature, additional DataTrails SCITT Query APIs will be made available.
+
+Using the `SUBJECT` from above, query all DataTrails Events (SCITT Registered Statements).
+
+```bash
+SUBJECT="synsation.io/myproduct-v1.0"
+curl https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.subject=$SUBJECT \
+  | jq
+```
+
 ## Testing Action Updates
 
 To test incremental changes to this github action:
@@ -142,3 +158,6 @@ To test incremental changes to this github action:
             uses: synsation-corp/scitt-action@featurebranch
             uses: synsation-corp/scitt-action@5b861ed4722787835cdd5e9d86efc698974f1131
     ```
+
+[datatrails-events]:    https://docs.datatrails.ai/developers/api-reference/events-api/
+[scrapi]:               https://datatracker.ietf.org/doc/draft-ietf-scitt-scrapi/
