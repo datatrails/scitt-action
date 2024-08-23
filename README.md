@@ -144,20 +144,18 @@ curl https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attribut
   | jq
 ```
 
-## Testing Action Updates
+## Next Steps
 
-To test incremental changes to this github action:
+- [Getting started with SCITT & DataTrails][datatrails-scitt-preview]
+- [DigiCert Software Trust Manager - SCITT GitHub Action][digicert-scitt-action]
+- [IETF SCITT Working Group][ietf-scitt-wg]
+- [SCITT Community][scitt-community]
+- [SCITT Slack][scitt-slack]
 
-1. Fork https://github.com/datatrails/scitt-action/ into an org you own
-1. Make the changes to your fork of the scitt-action
-1. For the repo you wish to include this action:
-   - Change the `uses` to reference a branch or commit on your org/repo:
-
-    ```yaml
-            uses: <your-org>/scitt-action@<full-commit>
-            uses: synsation-corp/scitt-action@featurebranch
-            uses: synsation-corp/scitt-action@5b861ed4722787835cdd5e9d86efc698974f1131
-    ```
-
-[datatrails-events]:    https://docs.datatrails.ai/developers/api-reference/events-api/
-[scrapi]:               https://datatracker.ietf.org/doc/draft-ietf-scitt-scrapi/
+[datatrails-events]:        https://docs.datatrails.ai/developers/api-reference/events-api/
+[datatrails-scitt-preview]: https://docs.datatrails.ai/developers/developer-patterns/scitt-api/
+[digicert-scitt-action]:    https://github.com/digicert/scitt-action/
+[ietf-scitt-wg]:            https://datatracker.ietf.org/wg/scitt/about/
+[scitt-community]:          https://scitt.io
+[scitt-slack]:              https://ietf.slack.com/archives/C03PXCAR206
+[scrapi]:                   https://datatracker.ietf.org/doc/draft-ietf-scitt-scrapi/
