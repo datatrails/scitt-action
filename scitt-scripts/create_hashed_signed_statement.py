@@ -42,7 +42,8 @@ HEADER_LABEL_LOCATION = -6801
 # CBOR Object Signing and Encryption (COSE) "typ" (type) Header Parameter
 # https://datatracker.ietf.org/doc/rfc9596/
 HEADER_LABEL_TYPE = 16
-COSE_TYPE="application/hashed+cose"
+COSE_TYPE = "application/hashed+cose"
+
 
 def open_signing_key(key_file: str) -> SigningKey:
     """
@@ -208,7 +209,7 @@ def main():
         payload=payload_contents,
         payload_location=args.payload_location,
         signing_key=signing_key,
-        subject=args.subject
+        subject=args.subject,
     )
 
     with open(args.output_file, "wb") as output_file:

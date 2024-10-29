@@ -13,6 +13,9 @@ SIGNING_KEY_FILE=${7}
 SIGNED_STATEMENT_FILE="signed-statement.cbor"
 TOKEN_FILE="./bearer-token.txt"
 
+# Set FQDN from DATATRAILS_URL or default to app.datatrails.ai
+FQDN=${DATATRAILS_URL:-"app.datatrails.ai"}
+
 # Uncomment for debugging
 # echo "CONTENT_TYPE:              " ${CONTENT_TYPE}
 # echo "PAYLOAD_FILE:              " ${PAYLOAD_FILE}
@@ -56,6 +59,7 @@ echo "Register the SCITT Signed Statement to https://app.datatrails.ai/archivist
 python /scripts/register_signed_statement.py \
       --signed-statement-file $SIGNED_STATEMENT_FILE \
       --output-file $TRANSPARENT_STATEMENT_FILE \
+      --fqdn $FQDN \
       --log-level INFO
 
 python /scripts/dump_cbor.py \

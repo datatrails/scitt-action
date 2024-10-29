@@ -93,6 +93,8 @@ def create_signed_statement(
         HEADER_LABEL_CWT: {
             HEADER_LABEL_CWT_ISSUER: issuer,
             HEADER_LABEL_CWT_SUBJECT: subject,
+            # HEADER_LABEL_CWT_ISSUER: issuer.encode("ascii"),
+            # HEADER_LABEL_CWT_SUBJECT: subject.encode("ascii"),
             HEADER_LABEL_CWT_CNF: {
                 HEADER_LABEL_CNF_COSE_KEY: {
                     KpKty: KtyEC2,
@@ -162,6 +164,8 @@ def main():
         "--subject",
         type=str,
         help="subject to correlate statements made about an artifact.",
+        # a default of None breaks registration because registration does not allow nil issuer
+        default="scitt-subject",
     )
 
     # issuer
@@ -169,6 +173,8 @@ def main():
         "--issuer",
         type=str,
         help="issuer who owns the signing key.",
+        # a default of None breaks registration because registration does not allow nil subject
+        default="scitt-issuer",
     )
 
     # output file
