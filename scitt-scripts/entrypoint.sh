@@ -54,11 +54,12 @@ if [ ! -f $SIGNED_STATEMENT_FILE ]; then
   exit 126
 fi
 
+# --datatrails-url $DATATRAILS_URL \
 echo "Register the SCITT Signed Statement to $DATATRAILS_URL/archivist/v1/publicscitt/entries"
 python /scripts/register_signed_statement.py \
       --signed-statement-file $SIGNED_STATEMENT_FILE \
       --output-file $TRANSPARENT_STATEMENT_FILE \
-      --datatrails-url $DATATRAILS_URL \
+      --datatrails-url https://app.dev-robin-0.dev.datatrails.ai \
       --log-level INFO
 
 python /scripts/dump_cbor.py \
