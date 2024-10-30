@@ -9,12 +9,10 @@ SUBJECT=${4}
 TRANSPARENT_STATEMENT_FILE=${5}
 ISSUER=${6}
 SIGNING_KEY_FILE=${7}
+DATATRAILS_URL=${8}
 
 SIGNED_STATEMENT_FILE="signed-statement.cbor"
 TOKEN_FILE="./bearer-token.txt"
-
-# Set FQDN from DATATRAILS_URL or default to app.datatrails.ai
-FQDN=${DATATRAILS_URL:-"app.datatrails.ai"}
 
 # Uncomment for debugging
 # echo "CONTENT_TYPE:              " ${CONTENT_TYPE}
@@ -26,6 +24,7 @@ FQDN=${DATATRAILS_URL:-"app.datatrails.ai"}
 # echo "SIGNING_KEY_FILE:          " ${SIGNING_KEY_FILE}
 # echo "SIGNED_STATEMENT_FILE:     " ${SIGNED_STATEMENT_FILE}
 # echo "TOKEN_FILE:                " ${TOKEN_FILE}
+# echo "DATATRAILS_URL:            " ${DATATRAILS_URL}
 
 if [ ! -f $PAYLOAD_FILE ]; then
   echo "ERROR: Payload File: [$PAYLOAD_FILE] Not found!"
@@ -55,14 +54,14 @@ if [ ! -f $SIGNED_STATEMENT_FILE ]; then
   exit 126
 fi
 
-echo "Register the SCITT Signed Statement to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
+echo "Register the SCITT Signed Statement to $DATATRAILS_URL/archivist/v1/publicscitt/entries"
 python /scripts/register_signed_statement.py \
       --signed-statement-file $SIGNED_STATEMENT_FILE \
       --output-file $TRANSPARENT_STATEMENT_FILE \
-      --fqdn $FQDN \
+      --datatrails-url $DATATRAILS_URL \
       --log-level INFO
 
 python /scripts/dump_cbor.py \
       --input $TRANSPARENT_STATEMENT_FILE
 
-# curl https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.subject=$SUBJECT | jq
+# curl https://$DATATRAILS_URL/archivist/v2/publicassets/-/events?event_attributes.subject=$SUBJECT | jq

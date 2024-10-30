@@ -34,12 +34,14 @@ REQUEST_TIMEOUT = 30
 POLL_TIMEOUT = 120
 POLL_INTERVAL = 10
 
+DATATRAILS_URL_DEFAULT="https://app.datatrails.ai"
+
 
 def submit_statement(
     statement_file_path: str,
     headers: dict,
     logger: logging.Logger,
-    fqdn: str = "app.datatrails.ai",
+    datatrails_url: str = DATATRAILS_URL_DEFAULT,
 ) -> str:
     logging.info("submit_statement()")
     """
@@ -53,7 +55,7 @@ def submit_statement(
     logging.info("statement_file_path opened: %s", statement_file_path)
     # Make the POST request
     response = requests.post(
-        f"https://{fqdn}/archivist/v1/publicscitt/entries",
+        f"{datatrails_url}/archivist/v1/publicscitt/entries",
         headers=headers,
         data=data,
         timeout=REQUEST_TIMEOUT,
@@ -74,13 +76,13 @@ def submit_statement(
 
 
 def get_operation_status(
-    operation_id: str, headers: dict, fqdn: str = "app.datatrails.ai"
+    operation_id: str, headers: dict, datatrails_url: str = DATATRAILS_URL_DEFAULT
 ) -> dict:
     """
     Gets the status of a long-running registration operation
     """
     response = requests.get(
-        f"https://{fqdn}/archivist/v1/publicscitt/operations/{operation_id}",
+        f"{datatrails_url}/archivist/v1/publicscitt/operations/{operation_id}",
         headers=headers,
         timeout=REQUEST_TIMEOUT,
     )
@@ -94,7 +96,7 @@ def wait_for_entry_id(
     operation_id: str,
     headers: dict,
     logger: logging.Logger,
-    fqdn: str = "app.datatrails.ai",
+    datatrails_url: str = DATATRAILS_URL_DEFAULT,
 ) -> str:
     """
     Polls for the operation status to be 'succeeded'.
@@ -106,7 +108,7 @@ def wait_for_entry_id(
 
     for _ in range(poll_attempts):
         try:
-            operation_status = get_operation_status(operation_id, headers, fqdn)
+            operation_status = get_operation_status(operation_id, headers, datatrails_url)
 
             # pylint: disable=fixme
             # TODO: ensure get_operation_status handles error cases from the rest request
@@ -124,11 +126,11 @@ def wait_for_entry_id(
     raise TimeoutError("signed statement not registered within polling duration")
 
 
-def get_receipt(entry_id: str, request_headers: dict, fqdn: str = "app.datatrails.ai"):
+def get_receipt(entry_id: str, request_headers: dict, datatrails_url: str = DATATRAILS_URL_DEFAULT):
     """Get the receipt for the provided entry id"""
     # Get the receipt
     response = requests.get(
-        f"https://{fqdn}/archivist/v1/publicscitt/entries/{entry_id}/receipt",
+        f"{datatrails_url}/archivist/v1/publicscitt/entries/{entry_id}/receipt",
         headers=request_headers,
         timeout=REQUEST_TIMEOUT,
     )
@@ -165,7 +167,7 @@ def attach_receipt(
         file.write(ts)
 
 
-def get_leaf_hash(entry_id: str, fqdn: str = "app.datatrails.ai") -> str:
+def get_leaf_hash(entry_id: str, datatrails_url: str = DATATRAILS_URL_DEFAULT) -> str:
     """Obtain the leaf hash for a given Entry ID
 
     The leaf hash is the value that is proven by the COSE Receipt attached to the transparent statement.
@@ -183,9 +185,8 @@ def get_leaf_hash(entry_id: str, fqdn: str = "app.datatrails.ai") -> str:
 
     However, on its own, this does not show that the leaf hash commits the statement to the log.
     """
-    # https://app.dev-robin-0.dev.datatrails.ai/archivist/publicassets/192e1a4f-a391-4e6a-a74c-f97ff5bb4954
     identity = api_entryid_to_identity(entry_id)
-    public_url = f"https://{fqdn}/archivist/v2/public{identity}"
+    public_url = f"{datatrails_url}/archivist/v2/public{identity}"
     response = requests.get(public_url, timeout=REQUEST_TIMEOUT)
     response.raise_for_status()
     event = response.json()
@@ -221,10 +222,10 @@ def main():
 
     parser = argparse.ArgumentParser(description="Create a signed statement.")
     parser.add_argument(
-        "--fqdn",
+        "--datatrails-url",
         type=str,
-        help="Fully qualified domain name of the DataTrails transparency service.",
-        default="app.datatrails.ai",
+        help="The url of the DataTrails transparency service.",
+        default=DATATRAILS_URL_DEFAULT,
     )
 
     # Signed Statement file
@@ -265,7 +266,7 @@ def main():
     # Get auth
     logging.info("Get Auth Headers")
     try:
-        auth_headers = {"Authorization": get_app_auth_header(fqdn=args.fqdn)}
+        auth_headers = {"Authorization": get_app_auth_header(args.datatrails_url)}
     except Exception as e:
         logger.error(repr(e))
         sys.exit(1)
@@ -274,7 +275,7 @@ def main():
     logging.info("submit_statement: %s", args.signed_statement_file)
 
     op_id = submit_statement(
-        args.signed_statement_file, auth_headers, logger, fqdn=args.fqdn
+        args.signed_statement_file, auth_headers, logger, datatrails_url=args.datatrails_url
     )
     logging.info("Successfully submitted with Operation ID %s", op_id)
 
@@ -283,20 +284,20 @@ def main():
         logging.info("Waiting for registration to complete")
         # Wait for the registration to complete
         try:
-            entry_id = wait_for_entry_id(op_id, auth_headers, logger, fqdn=args.fqdn)
+            entry_id = wait_for_entry_id(op_id, auth_headers, logger, datatrails_url=args.datatrails_url)
         except TimeoutError as e:
             logger.error(e)
             sys.exit(1)
             logger.info("Fully Registered with Entry ID %s", entry_id)
 
-        leaf = get_leaf_hash(entry_id, fqdn=args.fqdn)
+        leaf = get_leaf_hash(entry_id, datatrails_url=args.datatrails_url)
         logger.info("Leaf Hash: %s", leaf.hex())
 
     if args.verify or args.output_file != "":
         # Don't attach the receipt without verifying the log returned a receipt
         # that genuinely represents the expected content.
 
-        receipt = get_receipt(entry_id, auth_headers, fqdn=args.fqdn)
+        receipt = get_receipt(entry_id, auth_headers, datatrails_url=args.datatrails_url)
         if not verify_receipt(receipt, leaf):
             logger.info("Receipt verification failed")
             sys.exit(1)

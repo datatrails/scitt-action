@@ -5,7 +5,7 @@ import requests
 REQUEST_TIMEOUT = 30
 
 
-def get_app_auth_header(fqdn: str = "app.datatrails.ai") -> str:
+def get_app_auth_header(datatrails_url: str = "https://app.datatrails.ai") -> str:
     """
     Get DataTrails bearer token from OIDC credentials in env
     """
@@ -19,7 +19,7 @@ def get_app_auth_header(fqdn: str = "app.datatrails.ai") -> str:
         )
 
     # Get token from the auth endpoint
-    url = f"https://{fqdn}/archivist/iam/v1/appidp/token"
+    url = f"{datatrails_url}/archivist/iam/v1/appidp/token"
     response = requests.post(
         url,
         data={
