@@ -9,6 +9,7 @@ SUBJECT=${4}
 TRANSPARENT_STATEMENT_FILE=${5}
 ISSUER=${6}
 SIGNING_KEY_FILE=${7}
+DATATRAILS_URL=${8}
 
 SIGNED_STATEMENT_FILE="signed-statement.cbor"
 TOKEN_FILE="./bearer-token.txt"
@@ -23,6 +24,7 @@ TOKEN_FILE="./bearer-token.txt"
 # echo "SIGNING_KEY_FILE:          " ${SIGNING_KEY_FILE}
 # echo "SIGNED_STATEMENT_FILE:     " ${SIGNED_STATEMENT_FILE}
 # echo "TOKEN_FILE:                " ${TOKEN_FILE}
+# echo "DATATRAILS_URL:            " ${DATATRAILS_URL}
 
 if [ ! -f $PAYLOAD_FILE ]; then
   echo "ERROR: Payload File: [$PAYLOAD_FILE] Not found!"
@@ -30,12 +32,12 @@ if [ ! -f $PAYLOAD_FILE ]; then
 fi
 
 # "Create an access token"
-/scripts/create-token.sh $TOKEN_FILE
+# /scripts/create-token.sh $TOKEN_FILE
 
-if [ ! -f $TOKEN_FILE ]; then
-  echo "ERROR: Token File: [$TOKEN_FILE] Not found!"
-  exit 126
-fi
+#if [ ! -f $TOKEN_FILE ]; then
+#  echo "ERROR: Token File: [$TOKEN_FILE] Not found!"
+#  exit 126
+#fi
 
 echo "Create a Signed Statement, hashing the payload"
 python /scripts/create_hashed_signed_statement.py \
@@ -52,13 +54,15 @@ if [ ! -f $SIGNED_STATEMENT_FILE ]; then
   exit 126
 fi
 
-echo "Register the SCITT Signed Statement to https://app.datatrails.ai/archivist/v1/publicscitt/entries"
+# --datatrails-url $DATATRAILS_URL \
+echo "Register the SCITT Signed Statement to $DATATRAILS_URL/archivist/v1/publicscitt/entries"
 python /scripts/register_signed_statement.py \
       --signed-statement-file $SIGNED_STATEMENT_FILE \
       --output-file $TRANSPARENT_STATEMENT_FILE \
+      --datatrails-url https://app.dev-robin-0.dev.datatrails.ai \
       --log-level INFO
 
 python /scripts/dump_cbor.py \
       --input $TRANSPARENT_STATEMENT_FILE
 
-# curl https://app.datatrails.ai/archivist/v2/publicassets/-/events?event_attributes.subject=$SUBJECT | jq
+# curl https://$DATATRAILS_URL/archivist/v2/publicassets/-/events?event_attributes.subject=$SUBJECT | jq

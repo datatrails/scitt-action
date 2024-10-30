@@ -26,6 +26,10 @@ inputs:
   signing-key-file:
     description: 'The .pem file used to sign the statement'
     required: true
+  datatrails-url:
+    description: 'The fully url of the DataTrails SCITT Service'
+    required: false
+    default: 'https://app.datatrails.ai'
 
 runs:
   using: 'docker'
@@ -38,3 +42,4 @@ runs:
     - ${{ inputs.transparent-statement-file }}
     - ${{ inputs.issuer }}
     - ${{ inputs.signing-key-file }}
+    - ${{ inputs.datatrails-url }}

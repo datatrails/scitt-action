@@ -77,7 +77,7 @@ def poll_operation_status(
 
         except requests.HTTPError as e:
             logger.debug("failed getting operation status, error: %s", e)
- 
+
         time_sleep(POLL_INTERVAL)
 
     raise TimeoutError("signed statement not registered within polling duration")
@@ -136,6 +136,7 @@ def main():
     except TimeoutError as e:
         print(e, file=sys.stderr)
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
