@@ -34,10 +34,10 @@ fi
 # "Create an access token"
 # /scripts/create-token.sh $TOKEN_FILE
 
-if [ ! -f $TOKEN_FILE ]; then
-  echo "ERROR: Token File: [$TOKEN_FILE] Not found!"
-  exit 126
-fi
+#if [ ! -f $TOKEN_FILE ]; then
+#  echo "ERROR: Token File: [$TOKEN_FILE] Not found!"
+#  exit 126
+#fi
 
 echo "Create a Signed Statement, hashing the payload"
 python /scripts/create_hashed_signed_statement.py \
