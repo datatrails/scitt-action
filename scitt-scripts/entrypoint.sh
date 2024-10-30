@@ -32,7 +32,7 @@ if [ ! -f $PAYLOAD_FILE ]; then
 fi
 
 # "Create an access token"
-/scripts/create-token.sh $TOKEN_FILE
+# /scripts/create-token.sh $TOKEN_FILE
 
 if [ ! -f $TOKEN_FILE ]; then
   echo "ERROR: Token File: [$TOKEN_FILE] Not found!"
