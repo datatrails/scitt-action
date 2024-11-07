@@ -20,7 +20,7 @@ from ecdsa import SigningKey, VerifyingKey
 
 # CWT header label comes from version 4 of the scitt architecture document
 # https://www.ietf.org/archive/id/draft-ietf-scitt-architecture-04.html#name-issuer-identity
-HEADER_LABEL_CWT = 13
+HEADER_LABEL_CWT = 15
 
 # Various CWT header labels come from:
 # https://www.rfc-editor.org/rfc/rfc8392.html#section-3.1
